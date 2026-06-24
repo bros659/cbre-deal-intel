@@ -59,7 +59,7 @@ html,body{height:100%;font-family:-apple-system,'Helvetica Neue',Arial,sans-seri
 .stat-n{font-size:26px;font-weight:500;color:var(--cg)}
 .stat-l{font-size:10px;color:var(--cm);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 .seg{display:flex;border:0.5px solid var(--cb);border-radius:3px;overflow:hidden}
-.sb{flex:1;padding:9px 4px;border:none;background:none;font-size:12px;cursor:pointer;font-family:inherit;color:var(--cm)}
+.sb{flex:1;padding:9px 4px;border:none;background:none;font-size:12px;cursor:pointer;font-family:inherit;color:var(--cm);-webkit-tap-highlight-color:transparent}
 .sb.sel{background:var(--cg);color:#fff;font-weight:500}
 .save-btn{width:100%;padding:12px;background:var(--cg);color:#fff;border:none;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;letter-spacing:.5px;text-transform:uppercase}
 .save-btn:active{background:var(--cgh)}
@@ -142,7 +142,7 @@ textarea{min-height:68px;resize:vertical;font-size:14px}
 <script>
 const ASSETS=['Office','Retail','Industrial','Hotels','BTR','PBSA','Land'];
 const GEOS=['Auckland','Wellington','Christchurch','Nationwide'];
-const TIMING=['0–3 months','3–6 months','6–12 months','12+ months'];
+const TIMING=['0\u20133 months','3\u20136 months','6\u201312 months','12+ months'];
 const RPS=['Core','Core Plus','Value Add','Opportunistic'];
 const STORE='cbre_deal_intel_v1';
 
@@ -153,12 +153,49 @@ let bFilters={assets:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:''
 let sFilters={assets:[],timing:[],returnProfiles:[]};
 let _uid=0;
 
-function uid(){return'id-'+(++_uid)+'-'+Date.now();}
+function uid(){return 'id-'+(++_uid)+'-'+Date.now();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function fmtNZD(n){if(!n)return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'m';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'k';return'$'+n;}
+function fmtNZD(n){if(!n)return '\u2014';if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'m';if(n>=1e3)return '$'+(n/1e3).toFixed(0)+'k';return '$'+n;}
 function daysAgo(d){if(!d)return 999;return Math.floor((Date.now()-new Date(d))/86400000);}
 function isStale(r){return daysAgo(r.lastUpdated)>30;}
 
+/* ── Currency helpers ── */
+function parseCurrency(s){return parseInt(String(s||'').replace(/[^0-9]/g,''))||0;}
+function formatCurrency(n){if(!n&&n!==0)return '';return '$'+Number(n).toLocaleString('en-NZ');}
+function attachCurrency(el){
+  if(!el)return;
+  el.addEventListener('focus',function(){
+    const raw=parseCurrency(this.dataset.raw||this.value);
+    this.dataset.raw=raw||'';
+    this.value=raw?String(raw):'';
+  });
+  el.addEventListener('input',function(){
+    const digits=this.value.replace(/[^0-9]/g,'');
+    this.dataset.raw=digits;
+    const pos=this.selectionStart;
+    this.value=digits;
+    try{this.setSelectionRange(pos,pos);}catch(e){}
+  });
+  el.addEventListener('blur',function(){
+    const raw=parseInt(this.dataset.raw||'0')||0;
+    this.dataset.raw=String(raw);
+    this.value=raw?formatCurrency(raw):'';
+  });
+}
+function initCurrencyFields(container){
+  container.querySelectorAll('.currency-input').forEach(el=>attachCurrency(el));
+}
+function getCurrencyVal(container,id){
+  const el=container.querySelector('#'+id);
+  if(!el)return 0;
+  return parseCurrency(el.dataset.raw||el.value);
+}
+function currencyInput(id,value,placeholder){
+  const display=value?formatCurrency(value):'';
+  return `<input id="${id}" class="currency-input" type="text" inputmode="numeric" value="${esc(display)}" placeholder="${placeholder}" data-raw="${value||0}"/>`;
+}
+
+/* ── Storage ── */
 function persist(){try{localStorage.setItem(STORE,JSON.stringify({buyers,sellers}));}catch(e){}}
 function hydrate(){
   try{
@@ -167,7 +204,6 @@ function hydrate(){
   }catch(e){}
   seedDemo();
 }
-
 function seedDemo(){
   buyers=[
     {id:uid(),org:'Precinct Properties',contact:'Sarah Chen',assets:['Office','Retail'],minCheque:20000000,maxCheque:80000000,yieldTarget:5.5,irrTarget:9.5,irrPostFees:true,irrPostTax:false,readiness:'Hot',activeBidding:true,geos:['Auckland','Wellington'],notes:'Core-plus. Auckland CBD preferred.',lastUpdated:'2026-06-20'},
@@ -175,21 +211,23 @@ function seedDemo(){
     {id:uid(),org:'Stride Property',contact:'Nick Cobham',assets:['Retail','BTR'],minCheque:10000000,maxCheque:40000000,yieldTarget:6.5,irrTarget:null,irrPostFees:false,irrPostTax:false,readiness:'Cold',activeBidding:false,geos:['Nationwide'],notes:'Suburban retail. F&B anchors.',lastUpdated:'2026-01-15'},
   ];
   sellers=[
-    {id:uid(),org:'Goodman Property',asset:'Industrial estate, Wiri, Auckland',assets:['Industrial'],desc:'3-building complex. 12,400 sqm GBA, 4.8yr WALE.',price:42000000,timing:'3–6 months',returnProfiles:['Core Plus'],geos:['Auckland'],notes:'EOI process. Off-market preferred.',lastUpdated:'2026-06-18'},
-    {id:uid(),org:'Kiwi Property',asset:'Newmarket Shopping Centre, Auckland',assets:['Retail'],desc:'6,200 sqm GLA, 94% occupancy.',price:28000000,timing:'0–3 months',returnProfiles:['Core'],geos:['Auckland'],notes:'Board approved. Motivated vendor.',lastUpdated:'2026-06-22'},
-    {id:uid(),org:'Private Vendor',asset:'Lambton Quay Office, Wellington',assets:['Office'],desc:'Grade A. 3,100 sqm NLA.',price:19500000,timing:'6–12 months',returnProfiles:['Value Add'],geos:['Wellington'],notes:'Exploring options quietly.',lastUpdated:'2026-04-10'},
+    {id:uid(),org:'Goodman Property',asset:'Industrial estate, Wiri, Auckland',assets:['Industrial'],desc:'3-building complex. 12,400 sqm GBA, 4.8yr WALE.',price:42000000,timing:'3\u20136 months',returnProfiles:['Core Plus'],geos:['Auckland'],notes:'EOI process. Off-market preferred.',lastUpdated:'2026-06-18'},
+    {id:uid(),org:'Kiwi Property',asset:'Newmarket Shopping Centre, Auckland',assets:['Retail'],desc:'6,200 sqm GLA, 94% occupancy.',price:28000000,timing:'0\u20133 months',returnProfiles:['Core'],geos:['Auckland'],notes:'Board approved. Motivated vendor.',lastUpdated:'2026-06-22'},
+    {id:uid(),org:'Private Vendor',asset:'Lambton Quay Office, Wellington',assets:['Office'],desc:'Grade A. 3,100 sqm NLA.',price:19500000,timing:'6\u201312 months',returnProfiles:['Value Add'],geos:['Wellington'],notes:'Exploring options quietly.',lastUpdated:'2026-04-10'},
   ];
   persist();
 }
 
-function tBadge(t){const i=TIMING.indexOf(t);return`<span class="badge b-t${Math.max(0,i)}">${t||'—'}</span>`;}
-function rBadge(r){return`<span class="badge b-${r==='Hot'?'hot':r==='Warm'?'warm':'cold'}">${r}</span>`;}
+/* ── Badges ── */
+function tBadge(t){const i=TIMING.indexOf(t);return `<span class="badge b-t${Math.max(0,i)}">${t||'\u2014'}</span>`;}
+function rBadge(r){return `<span class="badge b-${r==='Hot'?'hot':r==='Warm'?'warm':'cold'}">${r}</span>`;}
 function irrLabel(b){
-  if(!b.irrTarget)return'—';
+  if(!b.irrTarget)return '\u2014';
   const p=[];if(b.irrPostFees)p.push('post fees');if(b.irrPostTax)p.push('post tax');
   return b.irrTarget.toFixed(1)+'%'+(p.length?` <span style="font-size:10px;color:var(--cm)">(${p.join(', ')})</span>`:'');
 }
 
+/* ── Sort & filter ── */
 function sortRecs(arr,s){
   const a=[...arr];
   if(s==='date-new')return a.sort((x,y)=>new Date(y.lastUpdated||0)-new Date(x.lastUpdated||0));
@@ -198,63 +236,58 @@ function sortRecs(arr,s){
   if(s==='price-lo')return a.sort((x,y)=>(x.price||x.maxCheque||0)-(y.price||y.maxCheque||0));
   return a;
 }
-function applyBF(list){
-  return list.filter(b=>{
-    if(bFilters.assets.length&&!bFilters.assets.some(a=>b.assets.includes(a)))return false;
-    if(bFilters.readiness.length&&!bFilters.readiness.includes(b.readiness))return false;
-    if(bFilters.activeBidding&&!b.activeBidding)return false;
-    if(bFilters.minYield&&b.yieldTarget<parseFloat(bFilters.minYield))return false;
-    if(bFilters.maxYield&&b.yieldTarget>parseFloat(bFilters.maxYield))return false;
-    if(bFilters.minIRR&&(b.irrTarget||0)<parseFloat(bFilters.minIRR))return false;
-    if(bFilters.maxIRR&&(b.irrTarget||0)>parseFloat(bFilters.maxIRR))return false;
-    return true;
-  });
-}
-function applySF(list){
-  return list.filter(s=>{
-    if(sFilters.assets.length&&!sFilters.assets.some(a=>s.assets.includes(a)))return false;
-    if(sFilters.timing.length&&!sFilters.timing.includes(s.timing))return false;
-    if(sFilters.returnProfiles.length&&!sFilters.returnProfiles.some(p=>s.returnProfiles.includes(p)))return false;
-    return true;
-  });
-}
+function applyBF(list){return list.filter(b=>{
+  if(bFilters.assets.length&&!bFilters.assets.some(a=>b.assets.includes(a)))return false;
+  if(bFilters.readiness.length&&!bFilters.readiness.includes(b.readiness))return false;
+  if(bFilters.activeBidding&&!b.activeBidding)return false;
+  if(bFilters.minYield&&b.yieldTarget<parseFloat(bFilters.minYield))return false;
+  if(bFilters.maxYield&&b.yieldTarget>parseFloat(bFilters.maxYield))return false;
+  if(bFilters.minIRR&&(b.irrTarget||0)<parseFloat(bFilters.minIRR))return false;
+  if(bFilters.maxIRR&&(b.irrTarget||0)>parseFloat(bFilters.maxIRR))return false;
+  return true;
+});}
+function applySF(list){return list.filter(s=>{
+  if(sFilters.assets.length&&!sFilters.assets.some(a=>s.assets.includes(a)))return false;
+  if(sFilters.timing.length&&!sFilters.timing.includes(s.timing))return false;
+  if(sFilters.returnProfiles.length&&!sFilters.returnProfiles.some(p=>s.returnProfiles.includes(p)))return false;
+  return true;
+});}
 function cntBF(){return bFilters.assets.length+bFilters.readiness.length+(bFilters.activeBidding?1:0)+(bFilters.minYield?1:0)+(bFilters.maxYield?1:0)+(bFilters.minIRR?1:0)+(bFilters.maxIRR?1:0);}
 function cntSF(){return sFilters.assets.length+sFilters.timing.length+sFilters.returnProfiles.length;}
 
-function buyerCard(b){
-  return`<div class="card">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-      <div style="flex:1;min-width:0"><div class="card-org">${esc(b.org)}${isStale(b)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-user" style="font-size:11px" aria-hidden="true"></i> ${esc(b.contact||'—')}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${rBadge(b.readiness)}<button class="edit-link" onclick="openEdit('buyer','${b.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
-    </div>
-    <div class="card-tags">${b.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${b.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}${b.activeBidding?'<span class="tag tag-bid"><i class="ti ti-bolt" style="font-size:10px" aria-hidden="true"></i> Actively bidding</span>':''}</div>
-    <div class="card-detail">
-      <div class="kv"><span class="kv-l">Cheque range</span><span class="kv-v">${fmtNZD(b.minCheque)}–${fmtNZD(b.maxCheque)}</span></div>
-      <div class="kv"><span class="kv-l">Yield target</span><span class="kv-v">${b.yieldTarget?b.yieldTarget.toFixed(2)+'%':'—'}</span></div>
-      <div class="kv" style="grid-column:1/-1"><span class="kv-l">IRR target</span><span class="kv-v">${irrLabel(b)}</span></div>
-    </div>
-    ${b.notes?`<div class="card-notes">${esc(b.notes)}</div>`:''}
-  </div>`;
-}
-function sellerCard(s){
-  return`<div class="card">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-      <div style="flex:1;min-width:0"><div class="card-org">${esc(s.org)}${isStale(s)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> ${esc(s.asset||'—')}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${tBadge(s.timing)}<button class="edit-link" onclick="openEdit('seller','${s.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
-    </div>
-    <div class="card-tags">${s.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${s.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${s.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}</div>
-    <div class="card-detail">
-      <div class="kv"><span class="kv-l">Price expectation</span><span class="kv-v">${fmtNZD(s.price)}</span></div>
-      <div class="kv"><span class="kv-l">Timing</span><span class="kv-v">${s.timing||'—'}</span></div>
-    </div>
-    ${s.desc?`<div class="card-notes">${esc(s.desc)}</div>`:''}
-  </div>`;
-}
+/* ── Cards ── */
+function buyerCard(b){return `<div class="card">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+    <div style="flex:1;min-width:0"><div class="card-org">${esc(b.org)}${isStale(b)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-user" style="font-size:11px" aria-hidden="true"></i> ${esc(b.contact||'\u2014')}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${rBadge(b.readiness)}<button class="edit-link" onclick="openEdit('buyer','${b.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
+  </div>
+  <div class="card-tags">${b.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${b.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}${b.activeBidding?'<span class="tag tag-bid"><i class="ti ti-bolt" style="font-size:10px" aria-hidden="true"></i> Actively bidding</span>':''}</div>
+  <div class="card-detail">
+    <div class="kv"><span class="kv-l">Cheque range</span><span class="kv-v">${fmtNZD(b.minCheque)}\u2013${fmtNZD(b.maxCheque)}</span></div>
+    <div class="kv"><span class="kv-l">Yield target</span><span class="kv-v">${b.yieldTarget?b.yieldTarget.toFixed(2)+'%':'\u2014'}</span></div>
+    <div class="kv" style="grid-column:1/-1"><span class="kv-l">IRR target</span><span class="kv-v">${irrLabel(b)}</span></div>
+  </div>
+  ${b.notes?`<div class="card-notes">${esc(b.notes)}</div>`:''}
+</div>`;}
 
+function sellerCard(s){return `<div class="card">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
+    <div style="flex:1;min-width:0"><div class="card-org">${esc(s.org)}${isStale(s)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> ${esc(s.asset||'\u2014')}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${tBadge(s.timing)}<button class="edit-link" onclick="openEdit('seller','${s.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
+  </div>
+  <div class="card-tags">${s.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${s.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${s.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}</div>
+  <div class="card-detail">
+    <div class="kv"><span class="kv-l">Price expectation</span><span class="kv-v">${fmtNZD(s.price)}</span></div>
+    <div class="kv"><span class="kv-l">Timing</span><span class="kv-v">${s.timing||'\u2014'}</span></div>
+  </div>
+  ${s.desc?`<div class="card-notes">${esc(s.desc)}</div>`:''}
+</div>`;}
+
+/* ── Filter panel ── */
 function filterPanelHTML(type){
   const n=type==='buyer'?cntBF():cntSF();
-  return`<div class="fp-wrap">
-    <div class="fp-head" onclick="filterOpen=!filterOpen;refreshFilterPanel()">
+  return `<div class="fp-wrap">
+    <div class="fp-head" onclick="filterOpen=!filterOpen;refreshFP()">
       <span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:''}</span>
       <i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>
     </div>
@@ -262,7 +295,7 @@ function filterPanelHTML(type){
   </div>`;
 }
 function filterBodyHTML(type){
-  if(type==='buyer'){const n=cntBF();return`<div class="fp-body">
+  if(type==='buyer'){const n=cntBF();return `<div class="fp-body">
     <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${bFilters.assets.includes(a)?' sel':''}" onclick="tBF('assets','${a}')">${a}</button>`).join('')}</div></div>
     <div class="fp-row"><span class="fl">Readiness</span><div class="chips">${['Hot','Warm','Cold'].map(r=>`<button class="chip${bFilters.readiness.includes(r)?' sel':''}" onclick="tBF('readiness','${r}')">${r}</button>`).join('')}</div></div>
     <div class="fp-row"><label class="cb-label"><input type="checkbox" ${bFilters.activeBidding?'checked':''} onchange="bFilters.activeBidding=this.checked;refreshCards()"/> Actively bidding only</label></div>
@@ -270,53 +303,96 @@ function filterBodyHTML(type){
     <div class="fp-row"><span class="fl">IRR target (%)</span><div class="range-row"><input type="number" step="0.1" placeholder="Min" value="${bFilters.minIRR}" oninput="bFilters.minIRR=this.value;refreshCards()"/><input type="number" step="0.1" placeholder="Max" value="${bFilters.maxIRR}" oninput="bFilters.maxIRR=this.value;refreshCards()"/></div></div>
     ${n>0?`<button onclick="bFilters={assets:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:'',activeBidding:false};refreshAll()" style="width:100%;padding:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Clear all filters</button>`:''}
   </div>`;}
-  else{const n=cntSF();return`<div class="fp-body">
+  const n=cntSF();return `<div class="fp-body">
     <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${sFilters.assets.includes(a)?' sel':''}" onclick="tSF('assets','${a}')">${a}</button>`).join('')}</div></div>
-    <div class="fp-row"><span class="fl">Timing</span><div class="chips">${TIMING.map(t=>`<button class="chip${sFilters.timing.includes(t)?' sel':''}" onclick="tSF('timing','${t}')">${t}</button>`).join('')}</div></div>
+    <div class="fp-row"><span class="fl">Timing</span><div class="chips">${TIMING.map(t=>`<button class="chip${sFilters.timing.includes(t)?' sel':''}" onclick="tSF('timing','${t.replace(/'/g,"\\'")}')">${t}</button>`).join('')}</div></div>
     <div class="fp-row"><span class="fl">Return profile</span><div class="chips">${RPS.map(p=>`<button class="chip${sFilters.returnProfiles.includes(p)?' sel':''}" onclick="tSF('returnProfiles','${p}')">${p}</button>`).join('')}</div></div>
     ${n>0?`<button onclick="sFilters={assets:[],timing:[],returnProfiles:[]};refreshAll()" style="width:100%;padding:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Clear all filters</button>`:''}
-  </div>`;}
+  </div>`;
 }
-
 function tBF(k,v){bFilters[k]=bFilters[k].includes(v)?bFilters[k].filter(x=>x!==v):[...bFilters[k],v];refreshAll();}
 function tSF(k,v){sFilters[k]=sFilters[k].includes(v)?sFilters[k].filter(x=>x!==v):[...sFilters[k],v];refreshAll();}
-
-function refreshFilterPanel(){
-  const fpEl=document.querySelector('.fp-wrap');
-  if(!fpEl)return;
+function refreshFP(){
+  const fp=document.querySelector('.fp-wrap');if(!fp)return;
   const n=currentTab==='buyers'?cntBF():cntSF();
-  fpEl.querySelector('.fp-head').innerHTML=`<span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:''}</span><i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>`;
+  fp.querySelector('.fp-head').innerHTML=`<span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:''}</span><i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>`;
   document.getElementById('fp-body').innerHTML=filterOpen?filterBodyHTML(currentTab):'';
 }
 function refreshCards(){
   const el=document.getElementById('cards');if(!el)return;
-  if(currentTab==='buyers'){const list=applyBF(sortRecs(buyers,bSort));el.innerHTML=list.length?list.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates match.</div>`;}
-  else{const list=applySF(sortRecs(sellers,sSort));el.innerHTML=list.length?list.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock matches.</div>`;}
-  refreshFilterPanel();
+  if(currentTab==='buyers'){const l=applyBF(sortRecs(buyers,bSort));el.innerHTML=l.length?l.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates match.</div>`;}
+  else{const l=applySF(sortRecs(sellers,sSort));el.innerHTML=l.length?l.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock matches.</div>`;}
+  refreshFP();
 }
-function refreshAll(){refreshCards();refreshFilterPanel();}
+function refreshAll(){refreshCards();refreshFP();}
 
+/* ── Forms ── */
+function buyerFormHTML(b){
+  const ba=b?b.assets:[],bg=b?b.geos:[],br=b?b.readiness:'Hot';
+  return `
+    <div class="fg"><label class="fl">Company</label><input id="f-org" value="${b?esc(b.org):''}" placeholder="e.g. Precinct Properties"/></div>
+    <div class="fg"><label class="fl">Contact</label><input id="f-contact" value="${b?esc(b.contact||''):''}" placeholder="e.g. Sarah Chen"/></div>
+    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${ba.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${bg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
+    <div class="fr fg">
+      <div><label class="fl">Min cheque (NZD)</label>${currencyInput('f-min',b?b.minCheque:0,'$5,000,000')}</div>
+      <div><label class="fl">Max cheque (NZD)</label>${currencyInput('f-max',b?b.maxCheque:0,'$50,000,000')}</div>
+    </div>
+    <div class="fg"><label class="fl">Initial yield target (%)</label><input id="f-yield" type="number" step="0.05" value="${b?b.yieldTarget||'':''}" placeholder="5.50"/></div>
+    <div class="fg"><label class="fl">IRR target (%)</label>
+      <div class="irr-row">
+        <input class="irr-inp" id="f-irr" type="number" step="0.1" value="${b?b.irrTarget||'':''}" placeholder="9.5"/>
+        <label class="irr-check"><input type="checkbox" id="f-irr-fees" ${b&&b.irrPostFees?'checked':''}/> Post fees</label>
+        <label class="irr-check"><input type="checkbox" id="f-irr-tax" ${b&&b.irrPostTax?'checked':''}/> Post tax</label>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Readiness</label>
+      <div class="seg" id="seg-r">${['Hot','Warm','Cold'].map(r=>`<button type="button" class="sb${br===r?' sel':''}" onclick="selSeg(this)">${r}</button>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="cb-label"><input type="checkbox" id="f-bid" ${b&&b.activeBidding?'checked':''}/> Actively bidding</label></div>
+    <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${b?esc(b.notes||''):''}</textarea></div>`;
+}
+function sellerFormHTML(s){
+  const sa=s?s.assets:[],sg=s?s.geos:[],sr=s?s.returnProfiles:[],st=s?s.timing:'6\u201312 months';
+  return `
+    <div class="fg"><label class="fl">Company</label><input id="f-org" value="${s?esc(s.org):''}" placeholder="e.g. Goodman Property"/></div>
+    <div class="fg"><label class="fl">Asset &mdash; property address</label><input id="f-asset" value="${s?esc(s.asset||''):''}" placeholder="e.g. 125 Queen St, Auckland CBD"/></div>
+    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${sa.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${sg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Asset / portfolio description</label><textarea id="f-desc" placeholder="Size, WALE, occupancy...">${s?esc(s.desc||''):''}</textarea></div>
+    <div class="fg"><label class="fl">Price expectation (NZD)</label>${currencyInput('f-price',s?s.price:0,'$25,000,000')}</div>
+    <div class="fg"><label class="fl">Likely timing</label>
+      <div class="seg" id="seg-t">${TIMING.map(t=>`<button type="button" class="sb${st===t?' sel':''}" onclick="selSeg(this)" style="font-size:11px">${t}</button>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="fl">Return profile</label><div class="chips" id="c-rp">${RPS.map(p=>`<button type="button" class="chip${sr.includes(p)?' sel':''}" onclick="this.classList.toggle('sel')">${p}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${s?esc(s.notes||''):''}</textarea></div>`;
+}
+
+/* ── Views ── */
 function renderBuyers(){
   const list=applyBF(sortRecs(buyers,bSort));
-  return`<div class="sh"><div><div class="dl"></div><h2>Mandates (${list.length})</h2></div><button class="add-btn" onclick="openAdd('buyer')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
+  return `<div class="sh"><div><div class="dl"></div><h2>Mandates (${list.length})</h2></div><button class="add-btn" onclick="openAdd('buyer')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
     <div class="search-wrap"><i class="ti ti-search search-icon" aria-hidden="true"></i><input class="search-input" type="search" placeholder="Search mandates..." id="search-b" autocomplete="off"/><div id="search-results-b"></div></div>
-    <div class="ctrl-row"><select class="ctrl-sel" onchange="bSort=this.value;refreshCards()"><option value="date-new"${bSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${bSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${bSort==='price-hi'?' selected':''}>Max cheque ↓</option><option value="price-lo"${bSort==='price-lo'?' selected':''}>Max cheque ↑</option></select></div>
+    <div class="ctrl-row"><select class="ctrl-sel" onchange="bSort=this.value;refreshCards()"><option value="date-new"${bSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${bSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${bSort==='price-hi'?' selected':''}>Max cheque \u2193</option><option value="price-lo"${bSort==='price-lo'?' selected':''}>Max cheque \u2191</option></select></div>
     ${filterPanelHTML('buyer')}
     <div id="cards">${list.length?list.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates yet.</div>`}</div>`;
 }
 function renderSellers(){
   const list=applySF(sortRecs(sellers,sSort));
-  return`<div class="sh"><div><div class="dl"></div><h2>Stock (${list.length})</h2></div><button class="add-btn" onclick="openAdd('seller')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
+  return `<div class="sh"><div><div class="dl"></div><h2>Stock (${list.length})</h2></div><button class="add-btn" onclick="openAdd('seller')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
     <div class="search-wrap"><i class="ti ti-search search-icon" aria-hidden="true"></i><input class="search-input" type="search" placeholder="Search stock..." id="search-s" autocomplete="off"/><div id="search-results-s"></div></div>
-    <div class="ctrl-row"><select class="ctrl-sel" onchange="sSort=this.value;refreshCards()"><option value="date-new"${sSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${sSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${sSort==='price-hi'?' selected':''}>Price ↓</option><option value="price-lo"${sSort==='price-lo'?' selected':''}>Price ↑</option></select></div>
+    <div class="ctrl-row"><select class="ctrl-sel" onchange="sSort=this.value;refreshCards()"><option value="date-new"${sSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${sSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${sSort==='price-hi'?' selected':''}>Price \u2193</option><option value="price-lo"${sSort==='price-lo'?' selected':''}>Price \u2191</option></select></div>
     ${filterPanelHTML('seller')}
     <div id="cards">${list.length?list.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock yet.</div>`}</div>`;
 }
 function renderMatches(){
   const m=[];
-  for(const b of buyers)for(const s of sellers){if(b.assets.some(a=>s.assets.includes(a))&&(b.geos.includes('Nationwide')||s.geos.some(g=>b.geos.includes(g)))&&(!b.maxCheque||!s.price||s.price<=b.maxCheque*1.15))m.push({buyer:b,seller:s,shared:b.assets.filter(a=>s.assets.includes(a))});}
+  for(const b of buyers)for(const s of sellers){
+    if(b.assets.some(a=>s.assets.includes(a))&&(b.geos.includes('Nationwide')||s.geos.some(g=>b.geos.includes(g)))&&(!b.maxCheque||!s.price||s.price<=b.maxCheque*1.15))
+      m.push({buyer:b,seller:s,shared:b.assets.filter(a=>s.assets.includes(a))});
+  }
   const stale=[...buyers,...sellers].filter(isStale).length;
-  return`<div class="stat-grid">
+  return `<div class="stat-grid">
     <div class="stat"><div class="stat-n">${buyers.length}</div><div class="stat-l">Mandates</div></div>
     <div class="stat"><div class="stat-n">${sellers.length}</div><div class="stat-l">Stock</div></div>
     <div class="stat"><div class="stat-n" style="color:var(--cgm)">${m.length}</div><div class="stat-l">Live matches</div></div>
@@ -324,52 +400,28 @@ function renderMatches(){
   </div>
   <div class="sh"><div><div class="dl"></div><h2>Matched pairs</h2></div><span class="badge b-match">${m.length} live</span></div>
   ${m.length===0?`<div class="empty"><i class="ti ti-arrows-exchange" aria-hidden="true"></i>No matches yet.</div>`:''}
-  ${m.map(x=>`<div class="match-card"><div class="match-row"><div class="ms"><div class="ml">Mandate</div><div class="mo">${esc(x.buyer.org)}</div><div class="md">${fmtNZD(x.buyer.minCheque)}–${fmtNZD(x.buyer.maxCheque)}${x.buyer.yieldTarget?' · '+x.buyer.yieldTarget.toFixed(2)+'% IY':''}</div></div><div class="mdiv"></div><div class="ms"><div class="ml">Stock</div><div class="mo">${esc(x.seller.org)}</div><div class="md">${fmtNZD(x.seller.price)} · ${x.seller.timing}</div></div></div><div class="match-foot">${x.shared.map(a=>`<span class="tag">${a}</span>`).join('')}${(x.buyer.geos.includes('Nationwide')?x.seller.geos:x.buyer.geos.filter(g=>x.seller.geos.includes(g))).slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}${x.seller.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${x.buyer.activeBidding?'<span class="tag tag-bid">Actively bidding</span>':''}</div></div>`).join('')}`;
-}
-
-function buyerFormHTML(b){
-  const ba=b?b.assets:[],bg=b?b.geos:[],br=b?b.readiness:'Hot';
-  return`<div class="fg"><label class="fl">Company</label><input id="f-org" value="${b?esc(b.org):''}" placeholder="e.g. Precinct Properties"/></div>
-    <div class="fg"><label class="fl">Contact</label><input id="f-contact" value="${b?esc(b.contact||''):''}" placeholder="e.g. Sarah Chen"/></div>
-    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${ba.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${bg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
-    <div class="fr fg"><div><label class="fl">Min cheque (NZD)</label><input id="f-min" type="number" value="${b?b.minCheque||'':''}" placeholder="5000000"/></div><div><label class="fl">Max cheque (NZD)</label><input id="f-max" type="number" value="${b?b.maxCheque||'':''}" placeholder="50000000"/></div></div>
-    <div class="fg"><label class="fl">Initial yield target (%)</label><input id="f-yield" type="number" step="0.05" value="${b?b.yieldTarget||'':''}" placeholder="5.50"/></div>
-    <div class="fg"><label class="fl">IRR target (%)</label><div class="irr-row"><input class="irr-inp" id="f-irr" type="number" step="0.1" value="${b?b.irrTarget||'':''}" placeholder="9.5"/><label class="irr-check"><input type="checkbox" id="f-irr-fees" ${b&&b.irrPostFees?'checked':''}/> Post fees</label><label class="irr-check"><input type="checkbox" id="f-irr-tax" ${b&&b.irrPostTax?'checked':''}/> Post tax</label></div></div>
-    <div class="fg"><label class="fl">Readiness</label><div class="seg" id="seg-r">${['Hot','Warm','Cold'].map(r=>`<button type="button" class="sb${br===r?' sel':''}" onclick="selSeg(this)">${r}</button>`).join('')}</div></div>
-    <div class="fg"><label class="cb-label"><input type="checkbox" id="f-bid" ${b&&b.activeBidding?'checked':''}/> Actively bidding</label></div>
-    <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${b?esc(b.notes||''):''}</textarea></div>`;
-}
-function sellerFormHTML(s){
-  const sa=s?s.assets:[],sg=s?s.geos:[],sr=s?s.returnProfiles:[],st=s?s.timing:'6–12 months';
-  return`<div class="fg"><label class="fl">Company</label><input id="f-org" value="${s?esc(s.org):''}" placeholder="e.g. Goodman Property"/></div>
-    <div class="fg"><label class="fl">Asset — property address</label><input id="f-asset" value="${s?esc(s.asset||''):''}" placeholder="e.g. 125 Queen St, Auckland CBD"/></div>
-    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${sa.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${sg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Asset / portfolio description</label><textarea id="f-desc" placeholder="Size, WALE, occupancy...">${s?esc(s.desc||''):''}</textarea></div>
-    <div class="fg"><label class="fl">Price expectation (NZD)</label><input id="f-price" type="number" value="${s?s.price||'':''}" placeholder="25000000"/></div>
-    <div class="fg"><label class="fl">Likely timing</label><div class="seg" id="seg-t">${TIMING.map(t=>`<button type="button" class="sb${st===t?' sel':''}" onclick="selSeg(this)" style="font-size:11px">${t}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Return profile</label><div class="chips" id="c-rp">${RPS.map(p=>`<button type="button" class="chip${sr.includes(p)?' sel':''}" onclick="this.classList.toggle('sel')">${p}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${s?esc(s.notes||''):''}</textarea></div>`;
+  ${m.map(x=>`<div class="match-card"><div class="match-row"><div class="ms"><div class="ml">Mandate</div><div class="mo">${esc(x.buyer.org)}</div><div class="md">${fmtNZD(x.buyer.minCheque)}\u2013${fmtNZD(x.buyer.maxCheque)}${x.buyer.yieldTarget?' \u00b7 '+x.buyer.yieldTarget.toFixed(2)+'% IY':''}</div></div><div class="mdiv"></div><div class="ms"><div class="ml">Stock</div><div class="mo">${esc(x.seller.org)}</div><div class="md">${fmtNZD(x.seller.price)} \u00b7 ${x.seller.timing}</div></div></div><div class="match-foot">${x.shared.map(a=>`<span class="tag">${a}</span>`).join('')}${(x.buyer.geos.includes('Nationwide')?x.seller.geos:x.buyer.geos.filter(g=>x.seller.geos.includes(g))).slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}${x.seller.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${x.buyer.activeBidding?'<span class="tag tag-bid">Actively bidding</span>':''}</div></div>`).join('')}`;
 }
 function renderAdd(){
-  return`<div class="sh"><div><div class="dl"></div><h2>Add intel</h2></div></div>
+  return `<div class="sh"><div><div class="dl"></div><h2>Add intel</h2></div></div>
     <div class="card" style="padding:15px">
       <div class="fg"><div class="seg" id="seg-type">
-        <button type="button" class="sb${addType==='buyer'?' sel':''}" onclick="addType='buyer';selSeg(this);document.getElementById('add-fields').innerHTML=buyerFormHTML(null);document.getElementById('save-lbl').textContent='Save mandate'">Mandate (buyer)</button>
-        <button type="button" class="sb${addType==='seller'?' sel':''}" onclick="addType='seller';selSeg(this);document.getElementById('add-fields').innerHTML=sellerFormHTML(null);document.getElementById('save-lbl').textContent='Save stock'">Stock (seller)</button>
+        <button type="button" class="sb${addType==='buyer'?' sel':''}" onclick="addType='buyer';selSeg(this);document.getElementById('add-fields').innerHTML=buyerFormHTML(null);document.getElementById('save-lbl').textContent='Save mandate';initCurrencyFields(document.getElementById('add-fields'))">Mandate (buyer)</button>
+        <button type="button" class="sb${addType==='seller'?' sel':''}" onclick="addType='seller';selSeg(this);document.getElementById('add-fields').innerHTML=sellerFormHTML(null);document.getElementById('save-lbl').textContent='Save stock';initCurrencyFields(document.getElementById('add-fields'))">Stock (seller)</button>
       </div></div>
       <div id="add-fields">${addType==='buyer'?buyerFormHTML(null):sellerFormHTML(null)}</div>
       <button class="save-btn" onclick="saveRecord()"><span id="save-lbl">Save ${addType==='buyer'?'mandate':'stock'}</span></button>
     </div>`;
 }
 
+/* ── Helpers ── */
 function selSeg(el){el.parentElement.querySelectorAll('.sb').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
-function gChips(c,id){return[...c.querySelectorAll('#'+id+' .chip.sel')].map(b=>b.textContent.trim());}
+function gChips(c,id){return [...c.querySelectorAll('#'+id+' .chip.sel')].map(b=>b.textContent.trim());}
 function gSeg(c,id){const e=c.querySelector('#'+id+' .sb.sel');return e?e.textContent.trim():null;}
-function collectB(c){return{org:c.querySelector('#f-org').value.trim(),contact:c.querySelector('#f-contact').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),minCheque:parseFloat(c.querySelector('#f-min').value)||0,maxCheque:parseFloat(c.querySelector('#f-max').value)||0,yieldTarget:parseFloat(c.querySelector('#f-yield').value)||0,irrTarget:parseFloat(c.querySelector('#f-irr').value)||null,irrPostFees:c.querySelector('#f-irr-fees').checked,irrPostTax:c.querySelector('#f-irr-tax').checked,readiness:gSeg(c,'seg-r')||'Warm',activeBidding:c.querySelector('#f-bid').checked,notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
-function collectS(c){return{org:c.querySelector('#f-org').value.trim(),asset:c.querySelector('#f-asset').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),desc:c.querySelector('#f-desc').value,price:parseFloat(c.querySelector('#f-price').value)||0,timing:gSeg(c,'seg-t')||'6–12 months',returnProfiles:gChips(c,'c-rp'),notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
+function collectB(c){return{org:c.querySelector('#f-org').value.trim(),contact:c.querySelector('#f-contact').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),minCheque:getCurrencyVal(c,'f-min'),maxCheque:getCurrencyVal(c,'f-max'),yieldTarget:parseFloat(c.querySelector('#f-yield').value)||0,irrTarget:parseFloat(c.querySelector('#f-irr').value)||null,irrPostFees:c.querySelector('#f-irr-fees').checked,irrPostTax:c.querySelector('#f-irr-tax').checked,readiness:gSeg(c,'seg-r')||'Warm',activeBidding:c.querySelector('#f-bid').checked,notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
+function collectS(c){return{org:c.querySelector('#f-org').value.trim(),asset:c.querySelector('#f-asset').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),desc:c.querySelector('#f-desc').value,price:getCurrencyVal(c,'f-price'),timing:gSeg(c,'seg-t')||'6\u201312 months',returnProfiles:gChips(c,'c-rp'),notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
 
+/* ── Search ── */
 function attachSearch(tab){
   const isBuyer=tab==='buyers';
   const inp=document.getElementById(isBuyer?'search-b':'search-s');
@@ -395,6 +447,7 @@ function attachSearch(tab){
   inp.addEventListener('blur',()=>{setTimeout(()=>{resEl.innerHTML='';},220);});
 }
 
+/* ── Navigation ── */
 function show(tab){
   currentTab=tab;filterOpen=false;
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
@@ -402,8 +455,8 @@ function show(tab){
   document.getElementById('content').innerHTML=
     tab==='buyers'?renderBuyers():tab==='sellers'?renderSellers():tab==='matches'?renderMatches():renderAdd();
   if(tab==='buyers'||tab==='sellers')attachSearch(tab);
+  if(tab==='add')initCurrencyFields(document.getElementById('add-fields'));
 }
-
 function openAdd(type){addType=type;show('add');}
 function openEdit(type,id){
   const rec=type==='buyer'?buyers.find(b=>b.id===id):sellers.find(s=>s.id===id);
@@ -415,9 +468,11 @@ function openEdit(type,id){
     `<button class="save-btn" onclick="saveEdit()">Update record</button>
      <button class="del-btn" onclick="deleteRecord('${type}','${id}')">Delete record</button>`;
   document.getElementById('edit-modal').classList.add('open');
+  initCurrencyFields(document.getElementById('modal-body'));
 }
 function closeModal(){document.getElementById('edit-modal').classList.remove('open');editId=null;editType=null;}
 
+/* ── CRUD ── */
 function saveRecord(){
   const c=document.getElementById('content');
   if(addType==='buyer'){const d=collectB(c);if(!d.org||!d.assets.length){alert('Company and asset class required');return;}buyers.push({id:uid(),...d});}
@@ -438,6 +493,7 @@ function deleteRecord(type,id){
   persist();closeModal();toast('Deleted');show(currentTab);
 }
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
+
 document.getElementById('edit-modal').addEventListener('click',e=>{if(e.target===document.getElementById('edit-modal'))closeModal();});
 
 hydrate();show('add');
