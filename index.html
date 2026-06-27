@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CBRE Deal Intel">
@@ -18,21 +18,22 @@ html,body{height:100%;font-family:-apple-system,'Helvetica Neue',Arial,sans-seri
 .t-logo{color:#fff;font-size:22px;font-weight:700;letter-spacing:2.5px}
 .t-title{color:#fff;font-size:14px;font-weight:500;margin-top:5px}
 .t-sub{color:rgba(255,255,255,0.55);font-size:10px;margin-top:2px;letter-spacing:.7px;text-transform:uppercase}
-.content{flex:1;overflow-y:auto;padding:12px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 80px)}
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 80px)}
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--cg);display:flex;z-index:100;border-top:1px solid var(--cgh);padding-bottom:env(safe-area-inset-bottom,0px)}
-.nb{flex:1;padding:9px 0 12px;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;color:rgba(255,255,255,0.45);font-size:9px;font-family:inherit;letter-spacing:.5px;text-transform:uppercase;-webkit-tap-highlight-color:transparent}
+.nb{flex:1;padding:9px 0 12px;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;color:rgba(255,255,255,0.45);font-size:9px;font-family:inherit;letter-spacing:.5px;text-transform:uppercase;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nb.active{color:#fff;border-top:2px solid var(--ca)}
 .nb i{font-size:20px}
 .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .sh h2{font-size:13px;font-weight:600;color:var(--cg);text-transform:uppercase;letter-spacing:.9px}
 .dl{height:3px;background:var(--ca);width:28px;margin-bottom:5px}
-.add-btn{background:var(--cg);color:#fff;border:none;border-radius:3px;padding:7px 12px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;letter-spacing:.3px;text-transform:uppercase}
+.add-btn{background:var(--cg);color:#fff;border:none;border-radius:3px;padding:7px 12px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;letter-spacing:.3px;text-transform:uppercase;touch-action:manipulation}
 .card{background:#fff;border-radius:3px;border:0.5px solid var(--cb);padding:14px 15px;margin-bottom:9px}
 .card-org{font-size:15px;font-weight:500;color:var(--ct)}
 .card-sub{font-size:12px;color:var(--cm);margin-top:2px}
 .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 .tag{font-size:11px;padding:3px 8px;border-radius:2px;background:var(--cgl);color:var(--cg);border:0.5px solid #B8CFC9;font-weight:500}
 .tag-rp{background:#F0EBF8;color:#5B2D8E;border-color:#C9B8D8}
+.tag-mt{background:#FEF3E2;color:#7D4E00;border-color:#E8D5A3}
 .tag-bid{background:#003F2D;color:#17E88F;border-color:#006A4D}
 .card-detail{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--cb)}
 .kv{display:flex;flex-direction:column;gap:2px}
@@ -59,54 +60,54 @@ html,body{height:100%;font-family:-apple-system,'Helvetica Neue',Arial,sans-seri
 .stat-n{font-size:26px;font-weight:500;color:var(--cg)}
 .stat-l{font-size:10px;color:var(--cm);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 .seg{display:flex;border:0.5px solid var(--cb);border-radius:3px;overflow:hidden}
-.sb{flex:1;padding:9px 4px;border:none;background:none;font-size:12px;cursor:pointer;font-family:inherit;color:var(--cm);-webkit-tap-highlight-color:transparent}
-.sb.sel{background:var(--cg);color:#fff;font-weight:500}
-.save-btn{width:100%;padding:12px;background:var(--cg);color:#fff;border:none;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;letter-spacing:.5px;text-transform:uppercase}
+.seg-btn{flex:1;padding:10px 4px;border:none;background:none;font-size:13px;cursor:pointer;font-family:inherit;color:var(--cm);-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px}
+.seg-btn.sel{background:var(--cg);color:#fff;font-weight:500}
+.save-btn{width:100%;padding:14px;background:var(--cg);color:#fff;border:none;border-radius:3px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;letter-spacing:.5px;text-transform:uppercase;touch-action:manipulation;min-height:48px}
 .save-btn:active{background:var(--cgh)}
-.chips{display:flex;flex-wrap:wrap;gap:5px}
-.chip{padding:6px 10px;border:0.5px solid var(--cb);border-radius:2px;font-size:12px;cursor:pointer;background:none;color:var(--cm);font-family:inherit;-webkit-tap-highlight-color:transparent}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:8px 12px;border:0.5px solid var(--cb);border-radius:2px;font-size:13px;cursor:pointer;background:none;color:var(--cm);font-family:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:36px}
 .chip.sel{background:var(--cg);color:#fff;border-color:var(--cg)}
-.fg{margin-bottom:13px}
-.fl{font-size:10px;font-weight:700;color:var(--cm);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.7px}
+.fg{margin-bottom:14px}
+.fl{font-size:10px;font-weight:700;color:var(--cm);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.7px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-input,select,textarea{width:100%;padding:9px 11px;border:0.5px solid var(--cb);border-radius:3px;font-size:16px;font-family:inherit;background:#fff;color:var(--ct);-webkit-appearance:none;appearance:none}
+input,select,textarea{width:100%;padding:11px 12px;border:0.5px solid var(--cb);border-radius:3px;font-size:16px;font-family:inherit;background:#fff;color:var(--ct);-webkit-appearance:none;appearance:none}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cg);box-shadow:0 0 0 2px rgba(0,63,45,0.1)}
-textarea{min-height:68px;resize:vertical;font-size:14px}
+textarea{min-height:72px;resize:vertical;font-size:15px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C5C5C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.check-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:2px}
+.check-item{display:flex;align-items:center;gap:8px;padding:10px 16px 10px 0;cursor:pointer;min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.check-item input[type=checkbox]{width:22px;height:22px;accent-color:var(--cg);cursor:pointer;flex-shrink:0;border-radius:4px}
+.check-item span{font-size:13px;color:var(--cm);user-select:none}
+.check-item input[type=checkbox]:checked + span{color:var(--cg);font-weight:500}
+.irr-wrap{display:flex;flex-direction:column;gap:8px}
 .search-wrap{position:relative;margin-bottom:11px}
 .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--cm);pointer-events:none}
-.search-input{padding-left:34px !important;font-size:14px !important}
+.search-input{padding-left:34px !important}
 .search-results{background:#fff;border:0.5px solid var(--cb);border-radius:3px;margin-top:4px;overflow:hidden}
-.sri{padding:12px;cursor:pointer;border-bottom:0.5px solid var(--cb);display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent}
+.sri{padding:13px 12px;cursor:pointer;border-bottom:0.5px solid var(--cb);display:flex;align-items:center;justify-content:space-between;min-height:52px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .sri:last-child{border-bottom:none}
 .sri:active{background:var(--cgl)}
 .sri-name{font-size:13px;font-weight:500;color:var(--ct)}
-.sri-sub{font-size:11px;color:var(--cm);margin-top:1px}
-.sri-tag{font-size:10px;padding:2px 7px;border-radius:2px;background:var(--cgl);color:var(--cg);font-weight:600;flex-shrink:0;margin-left:8px}
-.irr-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.irr-inp{flex:1;min-width:80px}
-.irr-check{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--cm);cursor:pointer;padding:4px 0}
-.irr-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--cg);cursor:pointer;flex-shrink:0}
-.cb-label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--cm);cursor:pointer}
-.cb-label input[type=checkbox]{width:18px;height:18px;accent-color:var(--cg);cursor:pointer;flex-shrink:0}
+.sri-sub{font-size:11px;color:var(--cm);margin-top:2px}
+.sri-tag{font-size:10px;padding:3px 8px;border-radius:2px;background:var(--cgl);color:var(--cg);font-weight:600;flex-shrink:0;margin-left:8px}
 .fp-wrap{background:#fff;border:0.5px solid var(--cb);border-radius:3px;padding:12px;margin-bottom:11px}
-.fp-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0}
+.fp-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 0;min-height:44px;touch-action:manipulation}
 .fp-head span{font-size:11px;font-weight:700;color:var(--cg);text-transform:uppercase;letter-spacing:.6px}
-.fp-body{margin-top:10px;display:flex;flex-direction:column;gap:10px}
-.fp-row{display:flex;flex-direction:column;gap:5px}
+.fp-body{margin-top:10px;display:flex;flex-direction:column;gap:12px}
+.fp-row{display:flex;flex-direction:column;gap:6px}
 .range-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.range-row input{padding:7px 9px;font-size:14px}
 .ctrl-row{display:flex;gap:6px;margin-bottom:10px}
-.ctrl-sel{flex:1;padding:8px 10px;border:0.5px solid var(--cb);border-radius:3px;font-size:13px;font-family:inherit;background:#fff;color:var(--ct)}
-.edit-link{background:none;border:none;color:var(--cm);cursor:pointer;font-size:11px;padding:4px 0;font-family:inherit;display:flex;align-items:center;gap:3px;-webkit-tap-highlight-color:transparent}
-.del-btn{width:100%;padding:11px;margin-top:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:.5px}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--cg);color:#fff;padding:10px 18px;border-radius:3px;font-size:13px;font-weight:500;z-index:300;white-space:nowrap;animation:fu .25s ease;pointer-events:none}
+.ctrl-sel{flex:1;padding:10px;border:0.5px solid var(--cb);border-radius:3px;font-size:13px;font-family:inherit;background:#fff;color:var(--ct)}
+.edit-link{background:none;border:none;color:var(--cm);cursor:pointer;font-size:12px;padding:6px 0;font-family:inherit;display:flex;align-items:center;gap:4px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:36px}
+.del-btn{width:100%;padding:13px;margin-top:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;text-transform:uppercase;letter-spacing:.5px;touch-action:manipulation;min-height:48px}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--cg);color:#fff;padding:12px 20px;border-radius:3px;font-size:14px;font-weight:500;z-index:300;white-space:nowrap;animation:fu .25s ease;pointer-events:none}
 @keyframes fu{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:12px 12px 0 0;padding:20px 16px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.modal{background:#fff;border-radius:16px 16px 0 0;padding:20px 16px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.modal-title{font-size:15px;font-weight:600;color:var(--cg)}
-.close-btn{background:var(--cw);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--cm);font-size:18px}
+.modal-title{font-size:16px;font-weight:600;color:var(--cg)}
+.close-btn{background:var(--cw);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--cm);font-size:18px;touch-action:manipulation}
 </style>
 </head>
 <body>
@@ -122,10 +123,10 @@ textarea{min-height:68px;resize:vertical;font-size:14px}
   </div>
   <div class="content" id="content"></div>
   <nav class="nav">
-    <button class="nb active" onclick="show('add')" id="nav-add"><i class="ti ti-circle-plus" aria-hidden="true"></i>Add</button>
-    <button class="nb" onclick="show('buyers')" id="nav-buyers"><i class="ti ti-users" aria-hidden="true"></i>Mandates</button>
-    <button class="nb" onclick="show('sellers')" id="nav-sellers"><i class="ti ti-building-store" aria-hidden="true"></i>Stock</button>
-    <button class="nb" onclick="show('matches')" id="nav-matches"><i class="ti ti-arrows-exchange" aria-hidden="true"></i>Matches</button>
+    <button class="nb active" id="nav-add" data-nav="add"><i class="ti ti-circle-plus" aria-hidden="true"></i>Add</button>
+    <button class="nb" id="nav-buyers" data-nav="buyers"><i class="ti ti-users" aria-hidden="true"></i>Mandates</button>
+    <button class="nb" id="nav-sellers" data-nav="sellers"><i class="ti ti-building-store" aria-hidden="true"></i>Stock</button>
+    <button class="nb" id="nav-matches" data-nav="matches"><i class="ti ti-arrows-exchange" aria-hidden="true"></i>Matches</button>
   </nav>
 </div>
 
@@ -133,7 +134,7 @@ textarea{min-height:68px;resize:vertical;font-size:14px}
   <div class="modal">
     <div class="modal-head">
       <div class="modal-title" id="modal-title">Edit</div>
-      <button class="close-btn" onclick="closeModal()"><i class="ti ti-x" aria-hidden="true"></i></button>
+      <button class="close-btn" id="modal-close"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>
     <div id="modal-body"></div>
   </div>
@@ -144,12 +145,13 @@ const ASSETS=['Office','Retail','Industrial','Hotels','BTR','PBSA','Land'];
 const GEOS=['Auckland','Wellington','Christchurch','Nationwide'];
 const TIMING=['0\u20133 months','3\u20136 months','6\u201312 months','12+ months'];
 const RPS=['Core','Core Plus','Value Add','Opportunistic'];
+const MANDATE_TYPES=['Core','Core Plus','Value Add','Opportunistic','Long WALE'];
 const STORE='cbre_deal_intel_v1';
 
 let buyers=[], sellers=[], currentTab='add';
 let addType='buyer', bSort='date-new', sSort='date-new';
 let editId=null, editType=null, filterOpen=false;
-let bFilters={assets:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:'',activeBidding:false};
+let bFilters={assets:[],mandateTypes:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:'',activeBidding:false};
 let sFilters={assets:[],timing:[],returnProfiles:[]};
 let _uid=0;
 
@@ -159,40 +161,74 @@ function fmtNZD(n){if(!n)return '\u2014';if(n>=1e6)return '$'+(n/1e6).toFixed(1)
 function daysAgo(d){if(!d)return 999;return Math.floor((Date.now()-new Date(d))/86400000);}
 function isStale(r){return daysAgo(r.lastUpdated)>30;}
 
-/* ── Currency helpers ── */
-function parseCurrency(s){return parseInt(String(s||'').replace(/[^0-9]/g,''))||0;}
-function formatCurrency(n){if(!n&&n!==0)return '';return '$'+Number(n).toLocaleString('en-NZ');}
-function attachCurrency(el){
+/* ── Title-case on space ── */
+function attachTitleCase(el){
   if(!el)return;
-  el.addEventListener('focus',function(){
-    const raw=parseCurrency(this.dataset.raw||this.value);
-    this.dataset.raw=raw||'';
-    this.value=raw?String(raw):'';
+  el.addEventListener('keydown',function(e){
+    if(e.key===' '||e.keyCode===32){
+      const v=this.value;
+      const pos=this.selectionStart;
+      // capitalise next char will be handled on input
+      this._capitalNext=true;
+    }
   });
   el.addEventListener('input',function(){
-    const digits=this.value.replace(/[^0-9]/g,'');
-    this.dataset.raw=digits;
-    const pos=this.selectionStart;
-    this.value=digits;
-    try{this.setSelectionRange(pos,pos);}catch(e){}
-  });
-  el.addEventListener('blur',function(){
-    const raw=parseInt(this.dataset.raw||'0')||0;
-    this.dataset.raw=String(raw);
-    this.value=raw?formatCurrency(raw):'';
+    if(this._capitalNext){
+      this._capitalNext=false;
+      const pos=this.selectionStart;
+      const v=this.value;
+      // find the character just inserted after the space
+      if(pos>0 && v[pos-1]&&v[pos-1]!==' '){
+        const before=v.slice(0,pos-1);
+        const ch=v[pos-1].toUpperCase();
+        const after=v.slice(pos);
+        this.value=before+ch+after;
+        this.setSelectionRange(pos,pos);
+      }
+    }
   });
 }
+function initTitleCaseFields(container){
+  container.querySelectorAll('.titlecase').forEach(el=>attachTitleCase(el));
+}
+
+/* ── Currency ── */
+function parseCurrency(s){return parseInt(String(s||'').replace(/[^0-9]/g,''))||0;}
+function formatCurrency(n){if(!n)return '';return '$'+Number(n).toLocaleString('en-NZ');}
+function currencyInput(id,value,placeholder){
+  const display=value?formatCurrency(value):'';
+  return `<input id="${id}" class="currency-input" type="text" inputmode="numeric" value="${esc(display)}" placeholder="${placeholder}" data-raw="${value||0}"/>`;
+}
 function initCurrencyFields(container){
-  container.querySelectorAll('.currency-input').forEach(el=>attachCurrency(el));
+  container.querySelectorAll('.currency-input').forEach(el=>{
+    el.addEventListener('focus',function(){
+      const raw=parseCurrency(this.dataset.raw||this.value);
+      this.dataset.raw=String(raw||'');
+      this.value=raw?String(raw):'';
+    });
+    el.addEventListener('input',function(){
+      const digits=this.value.replace(/[^0-9]/g,'');
+      this.dataset.raw=digits;
+      const pos=this.selectionStart;
+      this.value=digits;
+      try{this.setSelectionRange(pos,pos);}catch(e){}
+    });
+    el.addEventListener('blur',function(){
+      const raw=parseInt(this.dataset.raw||'0')||0;
+      this.dataset.raw=String(raw);
+      this.value=raw?formatCurrency(raw):'';
+    });
+  });
 }
 function getCurrencyVal(container,id){
   const el=container.querySelector('#'+id);
   if(!el)return 0;
   return parseCurrency(el.dataset.raw||el.value);
 }
-function currencyInput(id,value,placeholder){
-  const display=value?formatCurrency(value):'';
-  return `<input id="${id}" class="currency-input" type="text" inputmode="numeric" value="${esc(display)}" placeholder="${placeholder}" data-raw="${value||0}"/>`;
+
+function initFields(container){
+  initCurrencyFields(container);
+  initTitleCaseFields(container);
 }
 
 /* ── Storage ── */
@@ -206,14 +242,14 @@ function hydrate(){
 }
 function seedDemo(){
   buyers=[
-    {id:uid(),org:'Precinct Properties',contact:'Sarah Chen',assets:['Office','Retail'],minCheque:20000000,maxCheque:80000000,yieldTarget:5.5,irrTarget:9.5,irrPostFees:true,irrPostTax:false,readiness:'Hot',activeBidding:true,geos:['Auckland','Wellington'],notes:'Core-plus. Auckland CBD preferred.',lastUpdated:'2026-06-20'},
-    {id:uid(),org:'Investore Property',contact:'James Tait',assets:['Industrial'],minCheque:15000000,maxCheque:50000000,yieldTarget:6.0,irrTarget:8.0,irrPostFees:true,irrPostTax:true,readiness:'Warm',activeBidding:false,geos:['Auckland'],notes:'Long WALE. Sale & leaseback welcome.',lastUpdated:'2026-05-01'},
-    {id:uid(),org:'Stride Property',contact:'Nick Cobham',assets:['Retail','BTR'],minCheque:10000000,maxCheque:40000000,yieldTarget:6.5,irrTarget:null,irrPostFees:false,irrPostTax:false,readiness:'Cold',activeBidding:false,geos:['Nationwide'],notes:'Suburban retail. F&B anchors.',lastUpdated:'2026-01-15'},
+    {id:uid(),org:'Precinct Properties',contact:'Sarah Chen',assets:['Office','Retail'],mandateType:'Core Plus',minCheque:20000000,maxCheque:80000000,yieldTarget:5.5,irrTarget:9.5,irrPostFees:true,irrPostTax:false,readiness:'Hot',activeBidding:true,geos:['Auckland','Wellington'],notes:'Core-plus. Auckland CBD preferred.',lastUpdated:'2026-06-20'},
+    {id:uid(),org:'Investore Property',contact:'James Tait',assets:['Industrial'],mandateType:'Long WALE',minCheque:15000000,maxCheque:50000000,yieldTarget:6.0,irrTarget:8.0,irrPostFees:true,irrPostTax:true,readiness:'Warm',activeBidding:false,geos:['Auckland'],notes:'Long WALE. Sale & leaseback welcome.',lastUpdated:'2026-05-01'},
+    {id:uid(),org:'Stride Property',contact:'Nick Cobham',assets:['Retail','BTR'],mandateType:'Value Add',minCheque:10000000,maxCheque:40000000,yieldTarget:6.5,irrTarget:null,irrPostFees:false,irrPostTax:false,readiness:'Cold',activeBidding:false,geos:['Nationwide'],notes:'Suburban retail. F&B anchors.',lastUpdated:'2026-01-15'},
   ];
   sellers=[
-    {id:uid(),org:'Goodman Property',asset:'Industrial estate, Wiri, Auckland',assets:['Industrial'],desc:'3-building complex. 12,400 sqm GBA, 4.8yr WALE.',price:42000000,timing:'3\u20136 months',returnProfiles:['Core Plus'],geos:['Auckland'],notes:'EOI process. Off-market preferred.',lastUpdated:'2026-06-18'},
-    {id:uid(),org:'Kiwi Property',asset:'Newmarket Shopping Centre, Auckland',assets:['Retail'],desc:'6,200 sqm GLA, 94% occupancy.',price:28000000,timing:'0\u20133 months',returnProfiles:['Core'],geos:['Auckland'],notes:'Board approved. Motivated vendor.',lastUpdated:'2026-06-22'},
-    {id:uid(),org:'Private Vendor',asset:'Lambton Quay Office, Wellington',assets:['Office'],desc:'Grade A. 3,100 sqm NLA.',price:19500000,timing:'6\u201312 months',returnProfiles:['Value Add'],geos:['Wellington'],notes:'Exploring options quietly.',lastUpdated:'2026-04-10'},
+    {id:uid(),org:'Goodman Property',asset:'Industrial estate, Wiri, Auckland',assets:['Industrial'],returnProfiles:['Core Plus'],desc:'3-building complex. 12,400 sqm GBA, 4.8yr WALE.',price:42000000,timing:'3\u20136 months',geos:['Auckland'],notes:'EOI process. Off-market preferred.',lastUpdated:'2026-06-18'},
+    {id:uid(),org:'Kiwi Property',asset:'Newmarket Shopping Centre, Auckland',assets:['Retail'],returnProfiles:['Core'],desc:'6,200 sqm GLA, 94% occupancy.',price:28000000,timing:'0\u20133 months',geos:['Auckland'],notes:'Board approved. Motivated vendor.',lastUpdated:'2026-06-22'},
+    {id:uid(),org:'Private Vendor',asset:'Lambton Quay Office, Wellington',assets:['Office'],returnProfiles:['Value Add'],desc:'Grade A. 3,100 sqm NLA.',price:19500000,timing:'6\u201312 months',geos:['Wellington'],notes:'Exploring options quietly.',lastUpdated:'2026-04-10'},
   ];
   persist();
 }
@@ -224,10 +260,10 @@ function rBadge(r){return `<span class="badge b-${r==='Hot'?'hot':r==='Warm'?'wa
 function irrLabel(b){
   if(!b.irrTarget)return '\u2014';
   const p=[];if(b.irrPostFees)p.push('post fees');if(b.irrPostTax)p.push('post tax');
-  return b.irrTarget.toFixed(1)+'%'+(p.length?` <span style="font-size:10px;color:var(--cm)">(${p.join(', ')})</span>`:'');
+  return b.irrTarget.toFixed(1)+'%'+(p.length?` <span style="font-size:11px;color:var(--cm)">(${p.join(', ')})</span>`:'');
 }
 
-/* ── Sort & filter ── */
+/* ── Sort / filter ── */
 function sortRecs(arr,s){
   const a=[...arr];
   if(s==='date-new')return a.sort((x,y)=>new Date(y.lastUpdated||0)-new Date(x.lastUpdated||0));
@@ -236,155 +272,249 @@ function sortRecs(arr,s){
   if(s==='price-lo')return a.sort((x,y)=>(x.price||x.maxCheque||0)-(y.price||y.maxCheque||0));
   return a;
 }
-function applyBF(list){return list.filter(b=>{
-  if(bFilters.assets.length&&!bFilters.assets.some(a=>b.assets.includes(a)))return false;
-  if(bFilters.readiness.length&&!bFilters.readiness.includes(b.readiness))return false;
-  if(bFilters.activeBidding&&!b.activeBidding)return false;
-  if(bFilters.minYield&&b.yieldTarget<parseFloat(bFilters.minYield))return false;
-  if(bFilters.maxYield&&b.yieldTarget>parseFloat(bFilters.maxYield))return false;
-  if(bFilters.minIRR&&(b.irrTarget||0)<parseFloat(bFilters.minIRR))return false;
-  if(bFilters.maxIRR&&(b.irrTarget||0)>parseFloat(bFilters.maxIRR))return false;
-  return true;
-});}
-function applySF(list){return list.filter(s=>{
-  if(sFilters.assets.length&&!sFilters.assets.some(a=>s.assets.includes(a)))return false;
-  if(sFilters.timing.length&&!sFilters.timing.includes(s.timing))return false;
-  if(sFilters.returnProfiles.length&&!sFilters.returnProfiles.some(p=>s.returnProfiles.includes(p)))return false;
-  return true;
-});}
-function cntBF(){return bFilters.assets.length+bFilters.readiness.length+(bFilters.activeBidding?1:0)+(bFilters.minYield?1:0)+(bFilters.maxYield?1:0)+(bFilters.minIRR?1:0)+(bFilters.maxIRR?1:0);}
+
+/* FIX: filter now checks ALL active conditions correctly */
+function applyBF(list){
+  return list.filter(b=>{
+    if(bFilters.assets.length>0){
+      const match=bFilters.assets.some(a=>b.assets.includes(a));
+      if(!match)return false;
+    }
+    if(bFilters.mandateTypes.length>0){
+      if(!bFilters.mandateTypes.includes(b.mandateType))return false;
+    }
+    if(bFilters.readiness.length>0){
+      if(!bFilters.readiness.includes(b.readiness))return false;
+    }
+    if(bFilters.activeBidding&&!b.activeBidding)return false;
+    if(bFilters.minYield!==''&&!isNaN(parseFloat(bFilters.minYield))){
+      if((b.yieldTarget||0)<parseFloat(bFilters.minYield))return false;
+    }
+    if(bFilters.maxYield!==''&&!isNaN(parseFloat(bFilters.maxYield))){
+      if((b.yieldTarget||0)>parseFloat(bFilters.maxYield))return false;
+    }
+    if(bFilters.minIRR!==''&&!isNaN(parseFloat(bFilters.minIRR))){
+      if((b.irrTarget||0)<parseFloat(bFilters.minIRR))return false;
+    }
+    if(bFilters.maxIRR!==''&&!isNaN(parseFloat(bFilters.maxIRR))){
+      if((b.irrTarget||0)>parseFloat(bFilters.maxIRR))return false;
+    }
+    return true;
+  });
+}
+function applySF(list){
+  return list.filter(s=>{
+    if(sFilters.assets.length>0){
+      if(!sFilters.assets.some(a=>s.assets.includes(a)))return false;
+    }
+    if(sFilters.timing.length>0){
+      if(!sFilters.timing.includes(s.timing))return false;
+    }
+    if(sFilters.returnProfiles.length>0){
+      if(!sFilters.returnProfiles.some(p=>(s.returnProfiles||[]).includes(p)))return false;
+    }
+    return true;
+  });
+}
+function cntBF(){return bFilters.assets.length+bFilters.mandateTypes.length+bFilters.readiness.length+(bFilters.activeBidding?1:0)+(bFilters.minYield!==''?1:0)+(bFilters.maxYield!==''?1:0)+(bFilters.minIRR!==''?1:0)+(bFilters.maxIRR!==''?1:0);}
 function cntSF(){return sFilters.assets.length+sFilters.timing.length+sFilters.returnProfiles.length;}
 
 /* ── Cards ── */
-function buyerCard(b){return `<div class="card">
+function buyerCard(b){
+  return `<div class="card">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-    <div style="flex:1;min-width:0"><div class="card-org">${esc(b.org)}${isStale(b)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-user" style="font-size:11px" aria-hidden="true"></i> ${esc(b.contact||'\u2014')}</div></div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${rBadge(b.readiness)}<button class="edit-link" onclick="openEdit('buyer','${b.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
+    <div style="flex:1;min-width:0"><div class="card-org">${esc(b.org)}${isStale(b)?'<span class="stale" title="Stale"></span>':''}</div><div class="card-sub"><i class="ti ti-user" style="font-size:11px" aria-hidden="true"></i> ${esc(b.contact||'\u2014')}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin-left:8px;flex-shrink:0">${rBadge(b.readiness)}<button class="edit-link" data-action="edit-buyer" data-id="${b.id}"><i class="ti ti-edit" style="font-size:13px" aria-hidden="true"></i> Edit</button></div>
   </div>
-  <div class="card-tags">${b.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${b.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}${b.activeBidding?'<span class="tag tag-bid"><i class="ti ti-bolt" style="font-size:10px" aria-hidden="true"></i> Actively bidding</span>':''}</div>
+  <div class="card-tags">
+    ${b.assets.map(a=>`<span class="tag">${a}</span>`).join('')}
+    ${b.mandateType?`<span class="tag tag-mt">${b.mandateType}</span>`:''}
+    ${b.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}
+    ${b.activeBidding?'<span class="tag tag-bid"><i class="ti ti-bolt" style="font-size:10px" aria-hidden="true"></i> Actively bidding</span>':''}
+  </div>
   <div class="card-detail">
     <div class="kv"><span class="kv-l">Cheque range</span><span class="kv-v">${fmtNZD(b.minCheque)}\u2013${fmtNZD(b.maxCheque)}</span></div>
     <div class="kv"><span class="kv-l">Yield target</span><span class="kv-v">${b.yieldTarget?b.yieldTarget.toFixed(2)+'%':'\u2014'}</span></div>
     <div class="kv" style="grid-column:1/-1"><span class="kv-l">IRR target</span><span class="kv-v">${irrLabel(b)}</span></div>
   </div>
   ${b.notes?`<div class="card-notes">${esc(b.notes)}</div>`:''}
-</div>`;}
+</div>`;
+}
 
-function sellerCard(s){return `<div class="card">
+function sellerCard(s){
+  return `<div class="card">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">
-    <div style="flex:1;min-width:0"><div class="card-org">${esc(s.org)}${isStale(s)?'<span class="stale" title="Not updated in 30+ days"></span>':''}</div><div class="card-sub"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> ${esc(s.asset||'\u2014')}</div></div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-left:8px;flex-shrink:0">${tBadge(s.timing)}<button class="edit-link" onclick="openEdit('seller','${s.id}')"><i class="ti ti-edit" style="font-size:12px" aria-hidden="true"></i> Edit</button></div>
+    <div style="flex:1;min-width:0"><div class="card-org">${esc(s.org)}${isStale(s)?'<span class="stale" title="Stale"></span>':''}</div><div class="card-sub"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> ${esc(s.asset||'\u2014')}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin-left:8px;flex-shrink:0">${tBadge(s.timing)}<button class="edit-link" data-action="edit-seller" data-id="${s.id}"><i class="ti ti-edit" style="font-size:13px" aria-hidden="true"></i> Edit</button></div>
   </div>
-  <div class="card-tags">${s.assets.map(a=>`<span class="tag">${a}</span>`).join('')}${s.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${s.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}</div>
+  <div class="card-tags">
+    ${s.assets.map(a=>`<span class="tag">${a}</span>`).join('')}
+    ${(s.returnProfiles||[]).map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}
+    ${s.geos.slice(0,2).map(g=>`<span class="tag"><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> ${g}</span>`).join('')}
+  </div>
   <div class="card-detail">
     <div class="kv"><span class="kv-l">Price expectation</span><span class="kv-v">${fmtNZD(s.price)}</span></div>
     <div class="kv"><span class="kv-l">Timing</span><span class="kv-v">${s.timing||'\u2014'}</span></div>
   </div>
   ${s.desc?`<div class="card-notes">${esc(s.desc)}</div>`:''}
-</div>`;}
+</div>`;
+}
 
 /* ── Filter panel ── */
+function fpBadge(n){return n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:'';}
+
 function filterPanelHTML(type){
   const n=type==='buyer'?cntBF():cntSF();
   return `<div class="fp-wrap">
-    <div class="fp-head" onclick="filterOpen=!filterOpen;refreshFP()">
-      <span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:''}</span>
+    <div class="fp-head" data-action="toggle-filter">
+      <span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${fpBadge(n)}</span>
       <i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>
     </div>
     <div id="fp-body">${filterOpen?filterBodyHTML(type):''}</div>
   </div>`;
 }
+
 function filterBodyHTML(type){
-  if(type==='buyer'){const n=cntBF();return `<div class="fp-body">
-    <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${bFilters.assets.includes(a)?' sel':''}" onclick="tBF('assets','${a}')">${a}</button>`).join('')}</div></div>
-    <div class="fp-row"><span class="fl">Readiness</span><div class="chips">${['Hot','Warm','Cold'].map(r=>`<button class="chip${bFilters.readiness.includes(r)?' sel':''}" onclick="tBF('readiness','${r}')">${r}</button>`).join('')}</div></div>
-    <div class="fp-row"><label class="cb-label"><input type="checkbox" ${bFilters.activeBidding?'checked':''} onchange="bFilters.activeBidding=this.checked;refreshCards()"/> Actively bidding only</label></div>
-    <div class="fp-row"><span class="fl">Yield target (%)</span><div class="range-row"><input type="number" step="0.1" placeholder="Min" value="${bFilters.minYield}" oninput="bFilters.minYield=this.value;refreshCards()"/><input type="number" step="0.1" placeholder="Max" value="${bFilters.maxYield}" oninput="bFilters.maxYield=this.value;refreshCards()"/></div></div>
-    <div class="fp-row"><span class="fl">IRR target (%)</span><div class="range-row"><input type="number" step="0.1" placeholder="Min" value="${bFilters.minIRR}" oninput="bFilters.minIRR=this.value;refreshCards()"/><input type="number" step="0.1" placeholder="Max" value="${bFilters.maxIRR}" oninput="bFilters.maxIRR=this.value;refreshCards()"/></div></div>
-    ${n>0?`<button onclick="bFilters={assets:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:'',activeBidding:false};refreshAll()" style="width:100%;padding:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Clear all filters</button>`:''}
-  </div>`;}
-  const n=cntSF();return `<div class="fp-body">
-    <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${sFilters.assets.includes(a)?' sel':''}" onclick="tSF('assets','${a}')">${a}</button>`).join('')}</div></div>
-    <div class="fp-row"><span class="fl">Timing</span><div class="chips">${TIMING.map(t=>`<button class="chip${sFilters.timing.includes(t)?' sel':''}" onclick="tSF('timing','${t.replace(/'/g,"\\'")}')">${t}</button>`).join('')}</div></div>
-    <div class="fp-row"><span class="fl">Return profile</span><div class="chips">${RPS.map(p=>`<button class="chip${sFilters.returnProfiles.includes(p)?' sel':''}" onclick="tSF('returnProfiles','${p}')">${p}</button>`).join('')}</div></div>
-    ${n>0?`<button onclick="sFilters={assets:[],timing:[],returnProfiles:[]};refreshAll()" style="width:100%;padding:8px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Clear all filters</button>`:''}
+  if(type==='buyer'){
+    const n=cntBF();
+    return `<div class="fp-body">
+      <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${bFilters.assets.includes(a)?' sel':''}" data-filter="bf-assets" data-val="${esc(a)}">${a}</button>`).join('')}</div></div>
+      <div class="fp-row"><span class="fl">Mandate type</span><div class="chips">${MANDATE_TYPES.map(m=>`<button class="chip${bFilters.mandateTypes.includes(m)?' sel':''}" data-filter="bf-mandate" data-val="${esc(m)}">${m}</button>`).join('')}</div></div>
+      <div class="fp-row"><span class="fl">Readiness</span><div class="chips">${['Hot','Warm','Cold'].map(r=>`<button class="chip${bFilters.readiness.includes(r)?' sel':''}" data-filter="bf-readiness" data-val="${r}">${r}</button>`).join('')}</div></div>
+      <div class="fp-row">
+        <label class="check-item" style="padding:8px 0">
+          <input type="checkbox" id="fp-bidding" ${bFilters.activeBidding?'checked':''}/>
+          <span>Actively bidding only</span>
+        </label>
+      </div>
+      <div class="fp-row"><span class="fl">Yield target (%)</span><div class="range-row"><input type="number" step="0.1" placeholder="Min" value="${bFilters.minYield}" id="fp-min-yield"/><input type="number" step="0.1" placeholder="Max" value="${bFilters.maxYield}" id="fp-max-yield"/></div></div>
+      <div class="fp-row"><span class="fl">IRR target (%)</span><div class="range-row"><input type="number" step="0.1" placeholder="Min" value="${bFilters.minIRR}" id="fp-min-irr"/><input type="number" step="0.1" placeholder="Max" value="${bFilters.maxIRR}" id="fp-max-irr"/></div></div>
+      ${n>0?`<button data-action="clear-bf" style="width:100%;padding:10px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:13px;cursor:pointer;font-family:inherit;touch-action:manipulation">Clear all filters</button>`:''}
+    </div>`;
+  }
+  const n=cntSF();
+  return `<div class="fp-body">
+    <div class="fp-row"><span class="fl">Asset class</span><div class="chips">${ASSETS.map(a=>`<button class="chip${sFilters.assets.includes(a)?' sel':''}" data-filter="sf-assets" data-val="${esc(a)}">${a}</button>`).join('')}</div></div>
+    <div class="fp-row"><span class="fl">Timing</span><div class="chips">${TIMING.map(t=>`<button class="chip${sFilters.timing.includes(t)?' sel':''}" data-filter="sf-timing" data-val="${esc(t)}">${t}</button>`).join('')}</div></div>
+    <div class="fp-row"><span class="fl">Return profile</span><div class="chips">${RPS.map(p=>`<button class="chip${sFilters.returnProfiles.includes(p)?' sel':''}" data-filter="sf-rp" data-val="${esc(p)}">${p}</button>`).join('')}</div></div>
+    ${n>0?`<button data-action="clear-sf" style="width:100%;padding:10px;background:none;border:0.5px solid #C0392B;color:#C0392B;border-radius:3px;font-size:13px;cursor:pointer;font-family:inherit;touch-action:manipulation">Clear all filters</button>`:''}
   </div>`;
 }
-function tBF(k,v){bFilters[k]=bFilters[k].includes(v)?bFilters[k].filter(x=>x!==v):[...bFilters[k],v];refreshAll();}
-function tSF(k,v){sFilters[k]=sFilters[k].includes(v)?sFilters[k].filter(x=>x!==v):[...sFilters[k],v];refreshAll();}
+
 function refreshFP(){
   const fp=document.querySelector('.fp-wrap');if(!fp)return;
   const n=currentTab==='buyers'?cntBF():cntSF();
-  fp.querySelector('.fp-head').innerHTML=`<span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${n>0?` <span style="background:var(--ca);color:var(--cg);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px">${n}</span>`:''}</span><i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>`;
+  fp.querySelector('.fp-head').innerHTML=`<span><i class="ti ti-adjustments-horizontal" style="font-size:13px;vertical-align:-1px;margin-right:5px" aria-hidden="true"></i>Filters${fpBadge(n)}</span><i class="ti ti-chevron-${filterOpen?'up':'down'}" style="font-size:14px;color:var(--cm)" aria-hidden="true"></i>`;
   document.getElementById('fp-body').innerHTML=filterOpen?filterBodyHTML(currentTab):'';
+  attachFilterInputs();
 }
+
 function refreshCards(){
   const el=document.getElementById('cards');if(!el)return;
-  if(currentTab==='buyers'){const l=applyBF(sortRecs(buyers,bSort));el.innerHTML=l.length?l.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates match.</div>`;}
-  else{const l=applySF(sortRecs(sellers,sSort));el.innerHTML=l.length?l.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock matches.</div>`;}
+  if(currentTab==='buyers'){
+    const l=applyBF(sortRecs(buyers,bSort));
+    el.innerHTML=l.length?l.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates match your filters.</div>`;
+  } else {
+    const l=applySF(sortRecs(sellers,sSort));
+    el.innerHTML=l.length?l.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock matches your filters.</div>`;
+  }
   refreshFP();
 }
-function refreshAll(){refreshCards();refreshFP();}
+
+function attachFilterInputs(){
+  function bind(id,fn){const el=document.getElementById(id);if(el){el.removeEventListener('change',el._handler||null);el._handler=fn;el.addEventListener('change',fn);}}
+  bind('fp-bidding',e=>{bFilters.activeBidding=e.target.checked;refreshCards();});
+  bind('fp-min-yield',e=>{bFilters.minYield=e.target.value;refreshCards();});
+  bind('fp-max-yield',e=>{bFilters.maxYield=e.target.value;refreshCards();});
+  bind('fp-min-irr',e=>{bFilters.minIRR=e.target.value;refreshCards();});
+  bind('fp-max-irr',e=>{bFilters.maxIRR=e.target.value;refreshCards();});
+}
 
 /* ── Forms ── */
 function buyerFormHTML(b){
-  const ba=b?b.assets:[],bg=b?b.geos:[],br=b?b.readiness:'Hot';
+  const ba=b?b.assets:[],bg=b?b.geos:[],br=b?b.readiness:'Hot',bmt=b?b.mandateType||'':'';
   return `
-    <div class="fg"><label class="fl">Company</label><input id="f-org" value="${b?esc(b.org):''}" placeholder="e.g. Precinct Properties"/></div>
-    <div class="fg"><label class="fl">Contact</label><input id="f-contact" value="${b?esc(b.contact||''):''}" placeholder="e.g. Sarah Chen"/></div>
-    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${ba.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${bg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Company</label><input id="f-org" class="titlecase" value="${b?esc(b.org):''}" placeholder="e.g. Precinct Properties" autocapitalize="words"/></div>
+    <div class="fg"><label class="fl">Contact</label><input id="f-contact" class="titlecase" value="${b?esc(b.contact||''):''}" placeholder="e.g. Sarah Chen" autocapitalize="words"/></div>
+    <div class="fg">
+      <label class="fl">Asset class</label>
+      <div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${ba.includes(a)?' sel':''}" data-chip="asset">${a}</button>`).join('')}</div>
+    </div>
+    <div class="fg">
+      <label class="fl">Mandate type</label>
+      <div class="chips" id="c-mandate">${MANDATE_TYPES.map(m=>`<button type="button" class="chip${bmt===m?' sel':''}" data-chip="mandate">${m}</button>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${bg.includes(g)?' sel':''}" data-chip="geo">${g}</button>`).join('')}</div></div>
     <div class="fr fg">
       <div><label class="fl">Min cheque (NZD)</label>${currencyInput('f-min',b?b.minCheque:0,'$5,000,000')}</div>
       <div><label class="fl">Max cheque (NZD)</label>${currencyInput('f-max',b?b.maxCheque:0,'$50,000,000')}</div>
     </div>
     <div class="fg"><label class="fl">Initial yield target (%)</label><input id="f-yield" type="number" step="0.05" value="${b?b.yieldTarget||'':''}" placeholder="5.50"/></div>
-    <div class="fg"><label class="fl">IRR target (%)</label>
-      <div class="irr-row">
-        <input class="irr-inp" id="f-irr" type="number" step="0.1" value="${b?b.irrTarget||'':''}" placeholder="9.5"/>
-        <label class="irr-check"><input type="checkbox" id="f-irr-fees" ${b&&b.irrPostFees?'checked':''}/> Post fees</label>
-        <label class="irr-check"><input type="checkbox" id="f-irr-tax" ${b&&b.irrPostTax?'checked':''}/> Post tax</label>
+    <div class="fg">
+      <label class="fl">IRR target (%)</label>
+      <div class="irr-wrap">
+        <input id="f-irr" type="number" step="0.1" value="${b?b.irrTarget||'':''}" placeholder="9.5"/>
+        <div class="check-row">
+          <label class="check-item"><input type="checkbox" id="f-irr-fees" ${b&&b.irrPostFees?'checked':''}/><span>Post fees</span></label>
+          <label class="check-item"><input type="checkbox" id="f-irr-tax" ${b&&b.irrPostTax?'checked':''}/><span>Post tax</span></label>
+        </div>
       </div>
     </div>
-    <div class="fg"><label class="fl">Readiness</label>
-      <div class="seg" id="seg-r">${['Hot','Warm','Cold'].map(r=>`<button type="button" class="sb${br===r?' sel':''}" onclick="selSeg(this)">${r}</button>`).join('')}</div>
+    <div class="fg">
+      <label class="fl">Readiness</label>
+      <div class="seg" id="seg-r">${['Hot','Warm','Cold'].map(r=>`<button type="button" class="seg-btn${br===r?' sel':''}" data-seg="r">${r}</button>`).join('')}</div>
     </div>
-    <div class="fg"><label class="cb-label"><input type="checkbox" id="f-bid" ${b&&b.activeBidding?'checked':''}/> Actively bidding</label></div>
+    <div class="fg">
+      <label class="check-item">
+        <input type="checkbox" id="f-bid" ${b&&b.activeBidding?'checked':''}/>
+        <span>Actively bidding</span>
+      </label>
+    </div>
     <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${b?esc(b.notes||''):''}</textarea></div>`;
 }
+
 function sellerFormHTML(s){
-  const sa=s?s.assets:[],sg=s?s.geos:[],sr=s?s.returnProfiles:[],st=s?s.timing:'6\u201312 months';
+  const sa=s?s.assets:[],sg=s?s.geos:[],sr=s?s.returnProfiles||[]:[], st=s?s.timing:'6\u201312 months';
   return `
-    <div class="fg"><label class="fl">Company</label><input id="f-org" value="${s?esc(s.org):''}" placeholder="e.g. Goodman Property"/></div>
-    <div class="fg"><label class="fl">Asset &mdash; property address</label><input id="f-asset" value="${s?esc(s.asset||''):''}" placeholder="e.g. 125 Queen St, Auckland CBD"/></div>
-    <div class="fg"><label class="fl">Asset class</label><div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${sa.includes(a)?' sel':''}" onclick="this.classList.toggle('sel')">${a}</button>`).join('')}</div></div>
-    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${sg.includes(g)?' sel':''}" onclick="this.classList.toggle('sel')">${g}</button>`).join('')}</div></div>
+    <div class="fg"><label class="fl">Company</label><input id="f-org" class="titlecase" value="${s?esc(s.org):''}" placeholder="e.g. Goodman Property" autocapitalize="words"/></div>
+    <div class="fg"><label class="fl">Asset &mdash; property address</label><input id="f-asset" class="titlecase" value="${s?esc(s.asset||''):''}" placeholder="e.g. 125 Queen St, Auckland CBD" autocapitalize="words"/></div>
+    <div class="fg">
+      <label class="fl">Asset class</label>
+      <div class="chips" id="c-asset">${ASSETS.map(a=>`<button type="button" class="chip${sa.includes(a)?' sel':''}" data-chip="asset">${a}</button>`).join('')}</div>
+    </div>
+    <div class="fg">
+      <label class="fl">Return profile</label>
+      <div class="chips" id="c-rp">${RPS.map(p=>`<button type="button" class="chip${sr.includes(p)?' sel':''}" data-chip="rp">${p}</button>`).join('')}</div>
+    </div>
+    <div class="fg"><label class="fl">Geography</label><div class="chips" id="c-geo">${GEOS.map(g=>`<button type="button" class="chip${sg.includes(g)?' sel':''}" data-chip="geo">${g}</button>`).join('')}</div></div>
     <div class="fg"><label class="fl">Asset / portfolio description</label><textarea id="f-desc" placeholder="Size, WALE, occupancy...">${s?esc(s.desc||''):''}</textarea></div>
     <div class="fg"><label class="fl">Price expectation (NZD)</label>${currencyInput('f-price',s?s.price:0,'$25,000,000')}</div>
-    <div class="fg"><label class="fl">Likely timing</label>
-      <div class="seg" id="seg-t">${TIMING.map(t=>`<button type="button" class="sb${st===t?' sel':''}" onclick="selSeg(this)" style="font-size:11px">${t}</button>`).join('')}</div>
+    <div class="fg">
+      <label class="fl">Likely timing</label>
+      <div class="seg" id="seg-t">${TIMING.map(t=>`<button type="button" class="seg-btn${st===t?' sel':''}" data-seg="t" style="font-size:11px">${t}</button>`).join('')}</div>
     </div>
-    <div class="fg"><label class="fl">Return profile</label><div class="chips" id="c-rp">${RPS.map(p=>`<button type="button" class="chip${sr.includes(p)?' sel':''}" onclick="this.classList.toggle('sel')">${p}</button>`).join('')}</div></div>
     <div class="fg"><label class="fl">Notes</label><textarea id="f-notes" placeholder="Key context, source...">${s?esc(s.notes||''):''}</textarea></div>`;
 }
 
 /* ── Views ── */
 function renderBuyers(){
   const list=applyBF(sortRecs(buyers,bSort));
-  return `<div class="sh"><div><div class="dl"></div><h2>Mandates (${list.length})</h2></div><button class="add-btn" onclick="openAdd('buyer')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
+  return `<div class="sh"><div><div class="dl"></div><h2>Mandates (${list.length})</h2></div><button class="add-btn" data-action="open-add-buyer"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
     <div class="search-wrap"><i class="ti ti-search search-icon" aria-hidden="true"></i><input class="search-input" type="search" placeholder="Search mandates..." id="search-b" autocomplete="off"/><div id="search-results-b"></div></div>
-    <div class="ctrl-row"><select class="ctrl-sel" onchange="bSort=this.value;refreshCards()"><option value="date-new"${bSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${bSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${bSort==='price-hi'?' selected':''}>Max cheque \u2193</option><option value="price-lo"${bSort==='price-lo'?' selected':''}>Max cheque \u2191</option></select></div>
+    <div class="ctrl-row"><select class="ctrl-sel" id="bsort-sel"><option value="date-new"${bSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${bSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${bSort==='price-hi'?' selected':''}>Max cheque \u2193</option><option value="price-lo"${bSort==='price-lo'?' selected':''}>Max cheque \u2191</option></select></div>
     ${filterPanelHTML('buyer')}
     <div id="cards">${list.length?list.map(buyerCard).join(''):`<div class="empty"><i class="ti ti-users" aria-hidden="true"></i>No mandates yet.</div>`}</div>`;
 }
+
 function renderSellers(){
   const list=applySF(sortRecs(sellers,sSort));
-  return `<div class="sh"><div><div class="dl"></div><h2>Stock (${list.length})</h2></div><button class="add-btn" onclick="openAdd('seller')"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
+  return `<div class="sh"><div><div class="dl"></div><h2>Stock (${list.length})</h2></div><button class="add-btn" data-action="open-add-seller"><i class="ti ti-plus" aria-hidden="true"></i>Add</button></div>
     <div class="search-wrap"><i class="ti ti-search search-icon" aria-hidden="true"></i><input class="search-input" type="search" placeholder="Search stock..." id="search-s" autocomplete="off"/><div id="search-results-s"></div></div>
-    <div class="ctrl-row"><select class="ctrl-sel" onchange="sSort=this.value;refreshCards()"><option value="date-new"${sSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${sSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${sSort==='price-hi'?' selected':''}>Price \u2193</option><option value="price-lo"${sSort==='price-lo'?' selected':''}>Price \u2191</option></select></div>
+    <div class="ctrl-row"><select class="ctrl-sel" id="ssort-sel"><option value="date-new"${sSort==='date-new'?' selected':''}>Newest first</option><option value="date-old"${sSort==='date-old'?' selected':''}>Oldest first</option><option value="price-hi"${sSort==='price-hi'?' selected':''}>Price \u2193</option><option value="price-lo"${sSort==='price-lo'?' selected':''}>Price \u2191</option></select></div>
     ${filterPanelHTML('seller')}
     <div id="cards">${list.length?list.map(sellerCard).join(''):`<div class="empty"><i class="ti ti-building-store" aria-hidden="true"></i>No stock yet.</div>`}</div>`;
 }
+
 function renderMatches(){
   const m=[];
   for(const b of buyers)for(const s of sellers){
@@ -400,26 +530,71 @@ function renderMatches(){
   </div>
   <div class="sh"><div><div class="dl"></div><h2>Matched pairs</h2></div><span class="badge b-match">${m.length} live</span></div>
   ${m.length===0?`<div class="empty"><i class="ti ti-arrows-exchange" aria-hidden="true"></i>No matches yet.</div>`:''}
-  ${m.map(x=>`<div class="match-card"><div class="match-row"><div class="ms"><div class="ml">Mandate</div><div class="mo">${esc(x.buyer.org)}</div><div class="md">${fmtNZD(x.buyer.minCheque)}\u2013${fmtNZD(x.buyer.maxCheque)}${x.buyer.yieldTarget?' \u00b7 '+x.buyer.yieldTarget.toFixed(2)+'% IY':''}</div></div><div class="mdiv"></div><div class="ms"><div class="ml">Stock</div><div class="mo">${esc(x.seller.org)}</div><div class="md">${fmtNZD(x.seller.price)} \u00b7 ${x.seller.timing}</div></div></div><div class="match-foot">${x.shared.map(a=>`<span class="tag">${a}</span>`).join('')}${(x.buyer.geos.includes('Nationwide')?x.seller.geos:x.buyer.geos.filter(g=>x.seller.geos.includes(g))).slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}${x.seller.returnProfiles.map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}${x.buyer.activeBidding?'<span class="tag tag-bid">Actively bidding</span>':''}</div></div>`).join('')}`;
+  ${m.map(x=>`<div class="match-card">
+    <div class="match-row">
+      <div class="ms"><div class="ml">Mandate</div><div class="mo">${esc(x.buyer.org)}</div><div class="md">${fmtNZD(x.buyer.minCheque)}\u2013${fmtNZD(x.buyer.maxCheque)}${x.buyer.yieldTarget?' \u00b7 '+x.buyer.yieldTarget.toFixed(2)+'% IY':''}</div></div>
+      <div class="mdiv"></div>
+      <div class="ms"><div class="ml">Stock</div><div class="mo">${esc(x.seller.org)}</div><div class="md">${fmtNZD(x.seller.price)} \u00b7 ${x.seller.timing}</div></div>
+    </div>
+    <div class="match-foot">
+      ${x.shared.map(a=>`<span class="tag">${a}</span>`).join('')}
+      ${(x.buyer.geos.includes('Nationwide')?x.seller.geos:x.buyer.geos.filter(g=>x.seller.geos.includes(g))).slice(0,2).map(g=>`<span class="tag">${g}</span>`).join('')}
+      ${(x.seller.returnProfiles||[]).map(p=>`<span class="tag tag-rp">${p}</span>`).join('')}
+      ${x.buyer.mandateType?`<span class="tag tag-mt">${x.buyer.mandateType}</span>`:''}
+      ${x.buyer.activeBidding?'<span class="tag tag-bid">Actively bidding</span>':''}
+    </div>
+  </div>`).join('')}`;
 }
+
 function renderAdd(){
   return `<div class="sh"><div><div class="dl"></div><h2>Add intel</h2></div></div>
     <div class="card" style="padding:15px">
       <div class="fg"><div class="seg" id="seg-type">
-        <button type="button" class="sb${addType==='buyer'?' sel':''}" onclick="addType='buyer';selSeg(this);document.getElementById('add-fields').innerHTML=buyerFormHTML(null);document.getElementById('save-lbl').textContent='Save mandate';initCurrencyFields(document.getElementById('add-fields'))">Mandate (buyer)</button>
-        <button type="button" class="sb${addType==='seller'?' sel':''}" onclick="addType='seller';selSeg(this);document.getElementById('add-fields').innerHTML=sellerFormHTML(null);document.getElementById('save-lbl').textContent='Save stock';initCurrencyFields(document.getElementById('add-fields'))">Stock (seller)</button>
+        <button type="button" class="seg-btn${addType==='buyer'?' sel':''}" data-seg="type" data-type="buyer">Mandate (buyer)</button>
+        <button type="button" class="seg-btn${addType==='seller'?' sel':''}" data-seg="type" data-type="seller">Stock (seller)</button>
       </div></div>
       <div id="add-fields">${addType==='buyer'?buyerFormHTML(null):sellerFormHTML(null)}</div>
-      <button class="save-btn" onclick="saveRecord()"><span id="save-lbl">Save ${addType==='buyer'?'mandate':'stock'}</span></button>
+      <button class="save-btn" data-action="save-record"><span id="save-lbl">Save ${addType==='buyer'?'mandate':'stock'}</span></button>
     </div>`;
 }
 
-/* ── Helpers ── */
-function selSeg(el){el.parentElement.querySelectorAll('.sb').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
-function gChips(c,id){return [...c.querySelectorAll('#'+id+' .chip.sel')].map(b=>b.textContent.trim());}
-function gSeg(c,id){const e=c.querySelector('#'+id+' .sb.sel');return e?e.textContent.trim():null;}
-function collectB(c){return{org:c.querySelector('#f-org').value.trim(),contact:c.querySelector('#f-contact').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),minCheque:getCurrencyVal(c,'f-min'),maxCheque:getCurrencyVal(c,'f-max'),yieldTarget:parseFloat(c.querySelector('#f-yield').value)||0,irrTarget:parseFloat(c.querySelector('#f-irr').value)||null,irrPostFees:c.querySelector('#f-irr-fees').checked,irrPostTax:c.querySelector('#f-irr-tax').checked,readiness:gSeg(c,'seg-r')||'Warm',activeBidding:c.querySelector('#f-bid').checked,notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
-function collectS(c){return{org:c.querySelector('#f-org').value.trim(),asset:c.querySelector('#f-asset').value.trim(),assets:gChips(c,'c-asset'),geos:gChips(c,'c-geo'),desc:c.querySelector('#f-desc').value,price:getCurrencyVal(c,'f-price'),timing:gSeg(c,'seg-t')||'6\u201312 months',returnProfiles:gChips(c,'c-rp'),notes:c.querySelector('#f-notes').value,lastUpdated:new Date().toISOString().split('T')[0]};}
+/* ── Collect form data ── */
+function gChips(container,id){return [...container.querySelectorAll('#'+id+' .chip.sel')].map(b=>b.textContent.trim());}
+function gSeg(container,id){const e=container.querySelector('#'+id+' .seg-btn.sel');return e?e.textContent.trim():null;}
+
+function collectB(c){
+  return {
+    org:c.querySelector('#f-org').value.trim(),
+    contact:c.querySelector('#f-contact').value.trim(),
+    assets:gChips(c,'c-asset'),
+    mandateType:(()=>{const el=c.querySelector('#c-mandate .chip.sel');return el?el.textContent.trim():'';})(),
+    geos:gChips(c,'c-geo'),
+    minCheque:getCurrencyVal(c,'f-min'),
+    maxCheque:getCurrencyVal(c,'f-max'),
+    yieldTarget:parseFloat(c.querySelector('#f-yield').value)||0,
+    irrTarget:parseFloat(c.querySelector('#f-irr').value)||null,
+    irrPostFees:c.querySelector('#f-irr-fees').checked,
+    irrPostTax:c.querySelector('#f-irr-tax').checked,
+    readiness:gSeg(c,'seg-r')||'Warm',
+    activeBidding:c.querySelector('#f-bid').checked,
+    notes:c.querySelector('#f-notes').value,
+    lastUpdated:new Date().toISOString().split('T')[0]
+  };
+}
+function collectS(c){
+  return {
+    org:c.querySelector('#f-org').value.trim(),
+    asset:c.querySelector('#f-asset').value.trim(),
+    assets:gChips(c,'c-asset'),
+    returnProfiles:gChips(c,'c-rp'),
+    geos:gChips(c,'c-geo'),
+    desc:c.querySelector('#f-desc').value,
+    price:getCurrencyVal(c,'f-price'),
+    timing:gSeg(c,'seg-t')||'6\u201312 months',
+    notes:c.querySelector('#f-notes').value,
+    lastUpdated:new Date().toISOString().split('T')[0]
+  };
+}
 
 /* ── Search ── */
 function attachSearch(tab){
@@ -440,8 +615,8 @@ function attachSearch(tab){
         (r.notes||'').toLowerCase().includes(q)
       ).slice(0,6);
       resEl.innerHTML=hits.length
-        ?`<div class="search-results">${hits.map(r=>`<div class="sri" onclick="openEdit('${isBuyer?'buyer':'seller'}','${r.id}')"><div><div class="sri-name">${esc(r.org)}</div><div class="sri-sub">${esc(isBuyer?r.contact||'':r.asset||'')}</div></div><span class="sri-tag">${r.assets[0]||''}</span></div>`).join('')}</div>`
-        :`<div class="search-results"><div class="sri" style="cursor:default;color:var(--cm);font-size:13px">No results found</div></div>`;
+        ?`<div class="search-results">${hits.map(r=>`<div class="sri" data-action="${isBuyer?'edit-buyer':'edit-seller'}" data-id="${r.id}"><div><div class="sri-name">${esc(r.org)}</div><div class="sri-sub">${esc(isBuyer?r.contact||'':r.asset||'')}</div></div><span class="sri-tag">${r.assets[0]||''}</span></div>`).join('')}</div>`
+        :`<div class="search-results"><div class="sri" style="cursor:default;color:var(--cm)">No results found</div></div>`;
     },180);
   });
   inp.addEventListener('blur',()=>{setTimeout(()=>{resEl.innerHTML='';},220);});
@@ -451,34 +626,34 @@ function attachSearch(tab){
 function show(tab){
   currentTab=tab;filterOpen=false;
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('nav-'+tab).classList.add('active');
-  document.getElementById('content').innerHTML=
-    tab==='buyers'?renderBuyers():tab==='sellers'?renderSellers():tab==='matches'?renderMatches():renderAdd();
-  if(tab==='buyers'||tab==='sellers')attachSearch(tab);
-  if(tab==='add')initCurrencyFields(document.getElementById('add-fields'));
+  const nb=document.getElementById('nav-'+tab);if(nb)nb.classList.add('active');
+  const content=document.getElementById('content');
+  content.innerHTML=tab==='buyers'?renderBuyers():tab==='sellers'?renderSellers():tab==='matches'?renderMatches():renderAdd();
+  if(tab==='buyers'||tab==='sellers'){attachSearch(tab);attachFilterInputs();}
+  if(tab==='add')initFields(content);
+  const bs=document.getElementById('bsort-sel');if(bs)bs.addEventListener('change',e=>{bSort=e.target.value;refreshCards();});
+  const ss=document.getElementById('ssort-sel');if(ss)ss.addEventListener('change',e=>{sSort=e.target.value;refreshCards();});
 }
-function openAdd(type){addType=type;show('add');}
+
 function openEdit(type,id){
   const rec=type==='buyer'?buyers.find(b=>b.id===id):sellers.find(s=>s.id===id);
   if(!rec)return;
   editType=type;editId=id;
   document.getElementById('modal-title').textContent=type==='buyer'?'Edit mandate':'Edit stock';
-  document.getElementById('modal-body').innerHTML=
-    (type==='buyer'?buyerFormHTML(rec):sellerFormHTML(rec))+
-    `<button class="save-btn" onclick="saveEdit()">Update record</button>
-     <button class="del-btn" onclick="deleteRecord('${type}','${id}')">Delete record</button>`;
+  const mb=document.getElementById('modal-body');
+  mb.innerHTML=(type==='buyer'?buyerFormHTML(rec):sellerFormHTML(rec))+
+    `<button class="save-btn" data-action="save-edit">Update record</button>
+     <button class="del-btn" data-action="delete-record" data-type="${type}" data-id="${id}">Delete record</button>`;
   document.getElementById('edit-modal').classList.add('open');
-  initCurrencyFields(document.getElementById('modal-body'));
+  initFields(mb);
 }
 function closeModal(){document.getElementById('edit-modal').classList.remove('open');editId=null;editType=null;}
 
-/* ── CRUD ── */
 function saveRecord(){
   const c=document.getElementById('content');
   if(addType==='buyer'){const d=collectB(c);if(!d.org||!d.assets.length){alert('Company and asset class required');return;}buyers.push({id:uid(),...d});}
   else{const d=collectS(c);if(!d.org||!d.assets.length){alert('Company and asset class required');return;}sellers.push({id:uid(),...d});}
-  persist();
-  toast(addType==='buyer'?'Mandate saved':'Stock saved');
+  persist();toast(addType==='buyer'?'Mandate saved':'Stock saved');
   show(addType==='buyer'?'buyers':'sellers');
 }
 function saveEdit(){
@@ -494,7 +669,87 @@ function deleteRecord(type,id){
 }
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500);}
 
-document.getElementById('edit-modal').addEventListener('click',e=>{if(e.target===document.getElementById('edit-modal'))closeModal();});
+/* ══════════════════════════════════════
+   SINGLE DELEGATED EVENT HANDLER
+   All clicks routed here — no inline handlers
+══════════════════════════════════════ */
+document.addEventListener('click',function(e){
+  /* chip toggles in forms */
+  const chip=e.target.closest('[data-chip]');
+  if(chip){
+    if(chip.dataset.chip==='mandate'){
+      /* single-select — deselect siblings first */
+      chip.closest('#c-mandate').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+      chip.classList.toggle('sel');
+    } else {
+      chip.classList.toggle('sel');
+    }
+    return;
+  }
+
+  /* chip toggles in filter panel */
+  const fchip=e.target.closest('[data-filter]');
+  if(fchip){
+    const key=fchip.dataset.filter, val=fchip.dataset.val;
+    if(key==='bf-assets'){bFilters.assets=bFilters.assets.includes(val)?bFilters.assets.filter(x=>x!==val):[...bFilters.assets,val];}
+    else if(key==='bf-mandate'){bFilters.mandateTypes=bFilters.mandateTypes.includes(val)?bFilters.mandateTypes.filter(x=>x!==val):[...bFilters.mandateTypes,val];}
+    else if(key==='bf-readiness'){bFilters.readiness=bFilters.readiness.includes(val)?bFilters.readiness.filter(x=>x!==val):[...bFilters.readiness,val];}
+    else if(key==='sf-assets'){sFilters.assets=sFilters.assets.includes(val)?sFilters.assets.filter(x=>x!==val):[...sFilters.assets,val];}
+    else if(key==='sf-timing'){sFilters.timing=sFilters.timing.includes(val)?sFilters.timing.filter(x=>x!==val):[...sFilters.timing,val];}
+    else if(key==='sf-rp'){sFilters.returnProfiles=sFilters.returnProfiles.includes(val)?sFilters.returnProfiles.filter(x=>x!==val):[...sFilters.returnProfiles,val];}
+    refreshCards();return;
+  }
+
+  /* seg buttons */
+  const seg=e.target.closest('[data-seg]');
+  if(seg){
+    const type=seg.dataset.seg;
+    if(type==='type'){
+      addType=seg.dataset.type;
+      seg.parentElement.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('sel'));
+      seg.classList.add('sel');
+      const af=document.getElementById('add-fields');
+      if(af){af.innerHTML=addType==='buyer'?buyerFormHTML(null):sellerFormHTML(null);initFields(af);}
+      const lbl=document.getElementById('save-lbl');if(lbl)lbl.textContent='Save '+(addType==='buyer'?'mandate':'stock');
+    } else {
+      seg.parentElement.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('sel'));
+      seg.classList.add('sel');
+    }
+    return;
+  }
+
+  /* nav */
+  const nb=e.target.closest('[data-nav]');
+  if(nb){show(nb.dataset.nav);return;}
+
+  /* action buttons */
+  const act=e.target.closest('[data-action]');
+  if(act){
+    const a=act.dataset.action;
+    if(a==='toggle-filter'){filterOpen=!filterOpen;refreshFP();return;}
+    if(a==='open-add-buyer'){addType='buyer';show('add');return;}
+    if(a==='open-add-seller'){addType='seller';show('add');return;}
+    if(a==='edit-buyer'){openEdit('buyer',act.dataset.id);return;}
+    if(a==='edit-seller'){openEdit('seller',act.dataset.id);return;}
+    if(a==='save-record'){saveRecord();return;}
+    if(a==='save-edit'){saveEdit();return;}
+    if(a==='delete-record'){deleteRecord(act.dataset.type,act.dataset.id);return;}
+    if(a==='clear-bf'){bFilters={assets:[],mandateTypes:[],readiness:[],minYield:'',maxYield:'',minIRR:'',maxIRR:'',activeBidding:false};refreshCards();return;}
+    if(a==='clear-sf'){sFilters={assets:[],timing:[],returnProfiles:[]};refreshCards();return;}
+  }
+
+  if(e.target.closest('#modal-close')){closeModal();return;}
+  if(e.target===document.getElementById('edit-modal')){closeModal();return;}
+});
+
+/* Checkboxes — document-level change listener, reliable on iOS */
+document.addEventListener('change',function(e){
+  const el=e.target;
+  if(el.type!=='checkbox')return;
+  /* filter panel checkboxes */
+  if(el.id==='fp-bidding'){bFilters.activeBidding=el.checked;refreshCards();}
+  /* form checkboxes update their own state natively — collected on save */
+});
 
 hydrate();show('add');
 </script>
